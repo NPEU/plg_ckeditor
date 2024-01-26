@@ -1,0 +1,400 @@
+.cke_editable {
+    background: #ffe !important;
+    color: #333 !important;
+}
+
+.cke_editable.footnote_editor {
+    box-shadow: 0 0 0 100vmax #fff inset, 0 0 0 8px #fff, 0 0 0 9px #ddd;
+}
+
+.cke_editable a[href] {
+    color: #333 !important;
+}
+
+/*
+    Note the flexbox thing below can go when Extra migration is complete, but check for usage of that
+    class on the site.
+*/
+.cke_editable details,
+.cke_editable summary,
+.cke_editable p,
+.cke_editable h2,
+.cke_editable h3,
+.cke_editable h4,
+.cke_editable h5,
+.cke_editable h6,
+.cke_editable div:not([class*="cke_widget"]):not([class*="flexbox"]),
+.cke_editable aside,
+.cke_editable section,
+.cke_editable figure,
+.cke_editable figcaption,
+.cke_editable ol,
+.cke_editable ul,
+.cke_editable dl,
+.cke_editable li,
+.cke_editable dd,
+.cke_editable dt,
+.cke_editable blockquote,
+.cke_editable table {
+    background: #fff !important;
+    padding: 28px 8px 8px 8px !important;
+    border-width: 1px !important;
+    border-style: solid !important;
+    border-color: #ddd !important;
+    position: relative !important;
+    margin-bottom: 10px !important;
+    margin-top: 10px !important;
+}
+
+
+
+.cke_editable details:last-child,
+.cke_editable summary:last-child,
+.cke_editable p:last-child,
+.cke_editable h2:last-child,
+.cke_editable h3:last-child,
+.cke_editable h4:last-child,
+.cke_editable h5:last-child,
+.cke_editable h6:last-child,
+.cke_editable div:last-child:not([class*="cke_widget"]),
+.cke_editable aside:last-child,
+.cke_editable section:last-child,
+.cke_editable figure:last-child,
+.cke_editable figcaption:last-child,
+.cke_editable ol:last-child,
+.cke_editable ul:last-child,
+.cke_editable dl:last-child,
+.cke_editable li:last-child,
+.cke_editable dd:last-child,
+.cke_editable dt:last-child,
+.cke_editable blockquote:last-child,
+.cke_editable table:last-child,
+.cke_editable div[data-display-as*="box"]:last-child,
+.cke_editable div[data-display-as="themed"]:last-child {
+    margin-bottom: 0 !important;
+
+}
+
+.cke_editable div[data-extra-wrapper] > * {
+    background: rgba(255,255,255,0.4) !important;
+}
+/*
+.cke_editable ol:not([class*="cke_widget"]),
+.cke_editable > .user-box ol,
+.cke_editable div[data-extra-wrapper] ol,
+.cke_editable ul:not([class*="cke_widget"]),
+.cke_editable > .user-box ul,
+.cke_editable div[data-extra-wrapper] ul  {
+    padding-left: 30px !important;
+}
+*/
+
+.cke_editable table {
+    border-collapse: collapse !important;
+}
+
+.cke_editable td,
+.cke_editable th {
+    border: 1px solid #bbb !important;
+    padding: 0.5em !important;
+}
+
+.cke_editable th {
+    background: #ddd;
+}
+
+/*
+    This is related to user_css, but the selectors here override those selectors so adding stuff here
+    for now. Need to find a better way of handling this.
+    Specifically relates the 'div' blocks.
+*/
+
+
+
+
+.cke_editable > * {
+    font-style: normal !important;
+}
+
+/* Contain floats: */
+.cke_editable > *::after {
+    content: "" !important;
+    display: table !important;
+    clear: both !important;
+    height: 0 !important;
+    width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    opacity: 1 !important;
+    float: none !important;
+}
+
+/*.cke_editable > *::before,
+.cke_editable > .user-box > *::before,
+.cke_editable > details > *::before,
+.cke_editable div[data-extra-wrapper] > *::before,
+.cke_editable > figure > figcaption::before {*/
+.cke_editable details::before,
+.cke_editable summary::before,
+.cke_editable h2::before,
+.cke_editable h3::before,
+.cke_editable h4::before,
+.cke_editable h5::before,
+.cke_editable h6::before,
+.cke_editable p::before,
+.cke_editable div:not([class*="cke_widget"])::before,
+.cke_editable aside::before,
+.cke_editable section::before,
+.cke_editable figure::before,
+.cke_editable figcaption::before,
+.cke_editable ol::before,
+.cke_editable ul::before,
+.cke_editable dl::before,
+.cke_editable li::before,
+.cke_editable dd::before,
+.cke_editable dt::before,
+.cke_editable blockquote::before,
+.cke_editable table::before,
+.cke_editable div[data-display-as*="box"]::before,
+.cke_editable div[data-display-as="themed"]::before {
+    color: #999 !important;
+    display: block !important;
+    font-family: monospace !important;
+    font-size: 11px !important;
+    line-height: 1.5 !important;
+    position: absolute !important;
+    box-sizing: border-box !important;
+    left: -1px !important;
+    right: -1px !important;
+    top: -1px !important;
+    padding: 2px 4px !important;
+    background: #eee !important;
+    text-align: left !important;
+    text-transform: uppercase !important;
+    border-width: 1px !important;
+    border-style: solid !important;
+    border-color: #ddd !important;
+    margin: 0 !important;
+    opacity: 1 !important;
+    float: none !important;
+}
+
+/* Table needs special handling because it can't have internal padding: */
+.cke_editable table {
+    margin-top: 31px !important;
+}
+
+.cke_editable table::before {
+    left: 0 !important;
+    top: -21px !important;
+}
+
+/*
+    See note above.
+*/
+
+.cke_editable .user-box.user-box,
+.cke_editable div[data-display-as*="box"],
+.cke_editable div[data-display-as="themed"] {
+    border-color: #f7e1b5 !important;
+}
+
+.cke_editable .user-box.user-box::before {
+    background: #f7e1b5 !important;
+}
+
+.cke_widget_wrapper::before {
+    display: none !important;
+}
+
+
+
+
+.cke_editable > div:not([class*="cke_widget"])::before,
+.cke_editable div[data-display-as="box"]::before {
+    content: "WRAPPER" !important;
+}
+
+.cke_editable div[data-display-as="pale-box"]::before {
+    content: "PALE BOX" !important;
+}
+
+/*.cke_editable > div:not([class*="cke_widget"])[class~="user-box"]::before,*/
+.cke_editable div[data-display-as="themed-box--background"]::before {
+    content: "THEMED BOX (BACKGROUND)" !important;
+}
+
+.cke_editable div[data-display-as="themed-box--border"]::before {
+    content: "THEMED BOX (BORDER)" !important;
+}
+
+.cke_editable > div:not([class*="cke_widget"])[class~="user-box--notice"]::before,
+.cke_editable div[data-display-as="notice-box"]::before {
+    content: "NOTICE BOX" !important;
+}
+
+.cke_editable > div:not([class*="cke_widget"])[class~="user-box--expandable"]::before,
+.cke_editable div[data-display-as="themed-box  expandable"]::before {
+    content: "EXPANDABLE THEMED BOX" !important;
+}
+
+.cke_editable div[data-display-as="breakout-box"]::before {
+    content: "BREAKOUT BOX" !important;
+}
+
+.cke_editable div[data-display-as="breakout-box"][data-display-is="figure"]::before {
+    content: "BREAKOUT BOX (FIGURE)" !important;
+}
+
+.cke_editable div[data-display-as="blocks"]::before {
+    content: "BLOCKS CONTAINER" !important;
+}
+
+.cke_editable div[data-display-as="blocks blocks-large"]::before {
+    content: "BLOCKS CONTAINER (LARGE)" !important;
+}
+
+
+
+.cke_editable blockquote {
+	font-family: sans-serif !important;
+	font-style: italic !important;
+}
+
+
+.cke_editable blockquote::before {
+    content: "BLOCKQUOTE" !important;
+}
+
+.cke_editable table::before {
+    content: "TABLE" !important;
+}
+
+
+.cke_editable details::before {
+    content: "EXPANDER" !important;
+}
+
+
+.cke_editable summary::before {
+    content: "EXPANDER LABEL (click to toggle content)" !important;
+}
+
+
+.cke_editable details[open] > summary::before {
+    transform: none !important;
+}
+
+
+.cke_editable dd::before {
+    content: "DD" !important;
+}
+
+.cke_editable ol::before {
+    content: "OL" !important;
+}
+
+.cke_editable dt::before {
+    content: "DT" !important;
+}
+
+.cke_editable dl[data-contains="contact-details"]::before {
+    content: "DL (CONTACT DETAILS)" !important;
+}
+
+.cke_editable > figure {
+    display: block !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+.cke_editable figure::before {
+    content: "FIGURE" !important;
+}
+
+.cke_editable > figure > figcaption {
+    display: block !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+.cke_editable figcaption::before {
+    content: "FIGURE CAPTION" !important;
+}
+
+.cke_editable h2::before {
+    content: "H2" !important;
+}
+
+.cke_editable h3::before {
+    content: "H3" !important;
+}
+
+.cke_editable h4::before {
+    content: "H4" !important;
+}
+
+.cke_editable h5::before {
+    content: "H5" !important;
+}
+
+.cke_editable h6::before {
+    content: "H6" !important;
+}
+
+.cke_editable li::before {
+    content: "LI" !important;
+}
+
+
+.cke_editable ol::before {
+    content: "OL" !important;
+}
+
+
+.cke_editable p::before {
+    content: "P" !important;
+}
+
+
+.cke_editable section::before {
+    content: "WRAPPER" !important;
+}
+
+
+/*
+.cke_editable p[data-varient]::before {
+    content: "P (" attr(data-varient) ")" !important;
+}
+*/
+
+.cke_editable ul::before {
+    content: "UL" !important;
+}
+
+
+.cke_editable p[data-display-as="strapline"]::before {
+    content: "STRAPLINE" !important;
+}
+
+
+.cke_editable p[data-display-as="smallprint"]::before {
+    content: "SMALLPRINT" !important;
+}
+
+
+
+.cke_editable dt {
+    font-weight: bold !important;
+}
+
+
+
+
+.c-user-content [data-display-as~="box"]::after,
+.c-user-content [data-display-as~="pale-box"]::after,
+.c-user-content [data-display-as~="themed-box--background"]::after,
+.c-user-content [data-display-as~="themed-box--border"]::after,
+.c-user-content [data-display-as~="notice-box"]::after {
+    display: none;
+}

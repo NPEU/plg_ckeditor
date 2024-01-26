@@ -1,0 +1,65 @@
+@media only screen and (min-width: 768px) {
+
+    .cke_top.cke_reset_all {
+        position: sticky;
+        top: 73px;
+        border-bottom: 1px solid #ccc;
+    }
+
+
+    #editor-xtd-buttons {
+        background: #fff none repeat scroll 0 0;
+        bottom: 32px;
+        margin: 5px 5px 0;
+        padding: 3px 0 12px;
+        position: sticky;
+        width: auto;
+        float: none;
+        border-top: 1px solid #ccc;
+    }
+
+    
+    #editor-xtd-buttons.fixedsticky {
+        bottom: 27px;
+        padding: 3px 0 12px 30px;
+        width: 100%;
+        left: 0;
+        margin: 0;
+    }
+
+    #editor-xtd-buttons.fixedsticky {
+        position: fixed;
+    }
+    
+    .adminform {
+        margin-bottom: 20px;
+    }
+    
+    .fixedsticky {
+        position: -webkit-sticky;
+        position: -moz-sticky;
+        position: -ms-sticky;
+        position: -o-sticky;
+        position: sticky;
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        will-change: position;
+    }
+    /* When position: sticky is supported but native behavior is ignored */
+    .fixedsticky-withoutfixedfixed .fixedsticky-off,
+    .fixed-supported .fixedsticky-off {
+        position: inherit;
+    }
+    .fixedsticky-withoutfixedfixed .fixedsticky-on,
+    .fixed-supported .fixedsticky-on {
+        position: fixed;
+    }
+    .fixedsticky-dummy {
+        display: none;
+    }
+    .fixedsticky-on + .fixedsticky-dummy,
+    .fixedsticky-opposite + .fixedsticky-dummy {
+        display: block;
+        visibility: hidden !important;
+    }
+}

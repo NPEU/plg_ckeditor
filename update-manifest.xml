@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<updates>
+    <update>
+        <name>NPEU: plg_ckeditor</name>
+        <description>Joomla! plg_ckeditor plugin</description>
+        <element>ckeditor</element>
+        <type>plugin</type>
+        <folder>editors</folder>
+        <version>2.0.0</version>
+        <client>site</client>
+        <infourl title="NPEU: plg_ckeditor">https://github.com/NPEU/plg_ckeditor/releases/tag/v2.0.0</infourl>
+        <downloads>
+            <downloadurl type="full" format="zip">https://github.com/NPEU/plg_ckeditor/archive/v2.0.0.zip</downloadurl>
+        </downloads>
+        <targetplatform name="joomla" />
+        <tags>
+            <tag>stable</tag>
+        </tags>
+    </update>
+</updates>

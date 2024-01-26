@@ -1,0 +1,4391 @@
+@charset "UTF-8";
+/*
+
+*/
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Settings
+
+    Fall-Back is designed for use with the basic
+    [CSS Mustard Cut](https://github.com/Fall-Back/CSS-Mustard-Cut)
+
+    This determines a browser support base of:
+
+    IE 9+, FF 8+, Opera 12, [Chrome 29+, Android ~4.4+]
+    Chrome 29+, Opera 16+, Safari 6.1+, iOS 7+, Android ~4.4+
+
+
+    Any double-classing (e.g. `.class.class`) is deliberate and intended to increase specifity.
+    This allows any applicable Start-CSS declarations to be overidden.
+    E.g. `.{pattern} .{pattern}__child` would `a[href]`, but just `.{pattern}` wouldn't, so we use
+    `.{pattern}.{pattren}`
+
+    https://coolors.co/50514f-f25f5c-ffe066-247ba0-70c1b3
+
+|-------------------------------------------------------------------------------------------------*/
+/* --| FUNCTIONS AND MIXINS |-------------------------------------------------------------------- */
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Settings
+
+    Fall-Back is designed for use with the basic
+    [CSS Mustard Cut](https://github.com/Fall-Back/CSS-Mustard-Cut)
+
+    This determines a browser support base of:
+
+    IE 9+, FF 8+, Opera 12, [Chrome 29+, Android ~4.4+]
+    Chrome 29+, Opera 16+, Safari 6.1+, iOS 7+, Android ~4.4+
+
+
+    Any double-classing (e.g. `.class.class`) is deliberate and intended to increase specifity.
+    This allows any applicable Start-CSS declarations to be overidden.
+    E.g. `.{pattern} .{pattern}__child` would `a[href]`, but just `.{pattern}` wouldn't, so we use
+    `.{pattern}.{pattren}`
+
+    https://coolors.co/50514f-f25f5c-ffe066-247ba0-70c1b3
+
+|-------------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Functions
+|-------------------------------------------------------------------------------------------------*/
+/*
+    Colour contrast from https://gist.github.com/FStop/8959422
+
+    Usage:
+    @if f__color_contrast($colour, #fff) < 2 {
+        color: #333;
+    }
+    @else{
+        color: #fff;
+    }
+*/
+/* Awesome contrast ratio function
+* via https://gist.github.com/voxpelli/6304812
+**/
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Mixins
+|-------------------------------------------------------------------------------------------------*/
+/*
+    Apply a border and a padding that offsets the border-width from one spacing unit so as not to
+    affect the vertical rhythm.
+    Note the Opera Mini doesn't support `calc` so we need to include normal padding for that
+    browser.
+    Also, since we're supporting FF 8+, we're including -moz-calc for versions up to 16.
+    I may consider removing this as those browsers are dead, but I'm just being thorough for now.
+
+    Note on the 'last margin' issue/hack:
+    The pseudo element is intended to provide a collapsible margin to cancel out any 'trailing'
+    margins from content elements. However, since we're reducing the whole padding space by the
+    border-width to maintain the vertical rhythm, that margin is also less, BUT the content margin
+    is NOT being reduced, so that wins out - the reduction is ignored.
+    If the pseudo element bottom margin is adjusted to cancel out the height (1px) AS WELL AS
+    the amount of border-width, but the last element DOES NOT have a margin, then the space becomes
+    too small.
+    If pseudo-element height is 0, it doesn't work in IE, Chrome, Safari, without inline-block
+*/
+/*
+    This button mixin isn't really meant for generating specific/themed _types_ of button - there
+    would be too much code duplication for that.
+    Instead, this is intended to create buttons for new/custom selectors.
+    For example:
+
+    ```
+    [role="button"] {
+        @include f__button;
+    }
+    ```
+
+    rather than:
+
+    ```
+        .btn--affirmative {
+            @include f__button(<text-color>, <bg-color>);
+        }
+    ```
+
+    Note - because of this, think about removing parameters (it changed from my original intention -
+    I may change it back or split this into 2 mixins, or even just move things that are meant for
+    input[type="button"] to that ruleset - actually that's not a bad idea).
+
+*/
+/*
+    1. Remove the tapping delay from clickable elements.
+
+    Sort out the height of buttons. At 12px spacing, should be 30px high with 3px top/bottom margin.
+    Note Edge doesn't like: `line-height: calc(3rem - 2px)` if `display: inline-flex`
+    FF8 - ? doesn't like `line-height: -moz-calc()` and ignores
+    Need to make sure height is governed by line-height in case of breaks within buttons.
+*/
+/*
+    Uni-directional margins (bottom) is fine for most cases, but things like figcaptions that may
+    contain parapgraphs can result in double bottom margins, so flipping that around inside those
+    containers.
+*/
+/*! Fall-Back Start-CSS. See SCSS file for documentation. */
+/*
+
+    Start-CSS is designed for use with the basic
+    [CSS Mustard Cut](https://github.com/Fall-Back/CSS-Mustard-Cut)
+
+    This determines a browser support base of:
+
+    IE 9+, FF 8+, Opera 12, [Chrome 29+, Android ~4.4+]
+    Chrome 29+, Opera 16+, Safari 6.1+, iOS 7+, Android ~4.4+
+
+    Notes:
+
+    -moz-calc because this supports FF8+ and I like to be thorough.
+
+    CSS hacks from http://browserstrangeness.com/css_hacks.html
+    (hack and browser support in comments above each usage)
+
+    !!! Maybe don't include custom properties in this, I think it over-complicates things and needs
+    gradient background overlays to lighten/darken background colors dynamically.
+    Possibly include a separate file to add custom property support that overrides what it needs,
+    all wrapped in an `@supports`.
+
+    Resources:
+    * http://www.smashingmagazine.com/2012/12/css-baseline-the-good-the-bad-and-the-ugly/
+    * https://24ways.org/2006/compose-to-a-vertical-rhythm
+
+    NOTE TO SELF.
+    Where borders are concerned, probably best to leave margins alone and use padding to maintain
+    baseline-grid. After all, if there's a border, there will have to be padding too.
+
+    overflow-y makes element focussable in FireFox.
+
+*/
+/* Output class for reference (tmp): */
+/*.ref {
+    flbk--base-rem-space-unit: $f__base-rem-space-unit;
+    flbk--base-rem-1px: $f__base-rem-1px;
+    flbk--root-font-size: $f__root-font-size;
+    flbk--root-font-size-percent: $f__root-font-size-percent;
+}*/
+/*------------------------------------------------------------------------------------------------*\
+
+    ROOT STYLES
+
+\*------------------------------------------------------------------------------------------------*/
+/*
+    https://timkadlec.com/2012/10/ie10-snap-mode-and-responsive-design/
+    https://css-tricks.com/snippets/javascript/fix-ie-10-on-windows-phone-8-viewport/
+
+    The following rule fixes a problem with IE10 on Windows 8 snap mode, but apparently causes
+    problems on Windows Phone where the only fix seems to be a JS one.
+
+    https://nostrongbeliefs.com/why-i-think-we-shouldnt-use-css-viewport-in-ie10-for-now/
+
+    This reckons it's not worth it and as I can't seem to test the Windows Phone problem (emulator
+    on BrowserStack - not real device which is why I _think) I'm not seeing the problem) I think it
+    may be safest to keep this out for now.
+    - Hmmm affect 8.1 IE11 as well... not good.
+    UPDATE: using hack to only apply the viewport declaration to IE10-11 may work?
+
+    https://timkadlec.com/2013/01/windows-phone-8-and-device-width/
+*/
+:root {
+  quotes: '\201c' '\201d' '\2018' '\2019';
+}
+
+/*
+    1. Change the default box-sizing (-moz prefix for FF8-28).
+
+    2. `min-height` _should_ be what we want here (as declared in inuit css), except that
+       `min-height` doesn't works as expected; child elements set to `(min-)height: 100%;` won't
+       increase their height - they'll only do that if the parent has `height: 100%;`.
+       This can lead to situations where sometimes elements (and thus their visible decoration) do
+       not stretch to be tall enough for their content (because they're limited to 100% height).
+
+    3. Force scrollbars to always be visible to prevent awkward 'jumps' when
+       navigating between pages that do/do not have enough content to produce
+       scrollbars naturally. (I)
+
+    4. Convert the value to a percentage so as not to override user font settings.
+       This needs to be on the root node.
+
+    5. Prevent font size adjustments after orientation changes in IE and iOS. (N)
+
+    6. Use a more readable tab size (opinionated).
+*/
+html {
+  -moz-box-sizing: border-box;
+  /* 1 */
+  box-sizing: border-box;
+  /* 1 */
+  height: 100%;
+  /* 2 */
+  overflow-y: scroll;
+  /* 3 */
+  color: #333;
+  background-color: #eee;
+  font-size: 62.5%;
+  /* 4 */
+  -ms-text-size-adjust: 100%;
+  /* 5 */
+  -webkit-text-size-adjust: 100%;
+  /* 5 */
+  padding: 0;
+  margin: 0;
+  -moz-tab-size: 4;
+  /* 6 */
+  tab-size: 4;
+  /* 6 */
+}
+
+/*
+    Fix font size for IE9,10 as it can't calculate % to 1 decimal place! Grrr.
+*/
+@media screen and (min-width: 0\0) and (min-resolution: 0.001dpcm) {
+  html {
+    font-size: calc(0.625rem + 0.1px);
+  }
+}
+
+_:-ms-lang(x), html {
+  font-size: calc(0.625rem + 0.1px) \9;
+}
+
+/*
+    'Global' reset.
+
+    1. For Mac Safari 6.1-8.
+*/
+* {
+  -webkit-margin-before: 0;
+  /* 1 */
+  -webkit-margin-after: 0;
+  /* 1 */
+  -webkit-margin-start: 0;
+  /* 1 */
+  -webkit-margin-end: 0;
+  /* 1 */
+  margin: 0;
+  padding: 0;
+}
+
+/*
+    1. Add box sizing inheritance in all browsers.
+       Supporting FF8+ due to Mustard Cut so including for completeness.
+    2. Remove repeating backgrounds in all browsers.
+*/
+*,
+::before,
+::after {
+  -moz-box-sizing: inherit;
+  /* 1 */
+  box-sizing: inherit;
+  /* 1 */
+  background-repeat: no-repeat;
+  /* 2 */
+  -webkit-font-smoothing: inherit;
+}
+
+/*
+    1. Add text decoration inheritance in all browsers (opinionated). (s)
+    2. Add vertical alignment inheritance in all browsers (s).
+*/
+::before,
+::after {
+  text-decoration: inherit;
+  /* 1 */
+  vertical-align: inherit;
+  /* 2 */
+}
+
+/*
+    Remove the inner border and padding from form elements in older Firefox.
+*/
+::-moz-focus-inner {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/*
+    1. Ensure that absolutely positioned child elements expand to the full height of the body.
+    2. Reset any FOUC font match fallback. @TODO Make these vars.
+*/
+body {
+  position: relative;
+  /* 1 */
+  width: 100%;
+  min-width: 250px;
+  min-height: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0 2.4rem;
+  font-family: "Lato", sans-serif;
+  font-size: 1.6em;
+  line-height: 2.4rem;
+  letter-spacing: initial;
+  /* 2 */
+  word-spacing: initial;
+  /* 2 */
+  background-color: transparent;
+  color: #333;
+}
+
+/* IE9-11 */
+@media screen and (min-width: 0\0) and (min-resolution: +72dpi) {
+  body {
+    height: 100%;
+  }
+}
+
+/*------------------------------------------------------------------------------------------------*\
+
+    ALL ELEMENTS
+
+\*------------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: a
+|-------------------------------------------------------------------------------------------------*/
+/*
+    a:link a:visited a:hover a:active a:focus
+
+    1. Remove the gray background on active links in IE 10.
+    2. Remove the gaps in underlines in iOS 8+ and Safari 8+.
+    3. Remove the tapping delay from clickable elements .
+*/
+a[href] {
+  margin-bottom: -2px;
+  padding-bottom: 2px;
+  border-bottom: 2px solid;
+  color: #614776;
+  background-color: transparent;
+  /* 1 */
+  text-decoration: none;
+  -webkit-text-decoration-skip: objects;
+  /* 2 */
+  -ms-touch-action: manipulation;
+  /* 3 (IE10) */
+  touch-action: manipulation;
+  /* 3 */
+}
+
+a[href]:hover, a[href]:active {
+  border-bottom: 2px dashed;
+  color: #473456;
+}
+
+a[href]:focus {
+  outline: 0;
+  box-shadow: 0 0 0 3px rgba(97, 71, 118, 0.5);
+}
+
+a[href][rel="external"]::after {
+  display: inline;
+  content: "";
+  padding-left: 1.25em;
+  background: linear-gradient(45deg, transparent 50%, currentColor 50%);
+  font-size: 0.4em;
+  line-height: 0;
+  vertical-align: super;
+}
+
+a[href][rel="external"]:hover::after {
+  background: linear-gradient(45deg, transparent 50%, currentColor 50%);
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: abbr
+|-------------------------------------------------------------------------------------------------*/
+/*
+    1. Remove the bottom border in Firefox 39-.
+    2. Add the correct text decoration in Chrome, Edge, IE, Opera, and Safari.
+*/
+abbr {
+  cursor: help;
+}
+
+abbr[title] {
+  border-bottom: none;
+  /* 1 */
+  text-decoration: underline;
+  /* 2 */
+  text-decoration: underline dotted;
+  /* 2 */
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: address
+|-------------------------------------------------------------------------------------------------*/
+address {
+  margin-bottom: 2.4rem;
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: article
+|-------------------------------------------------------------------------------------------------*/
+article {
+  display: block;
+  margin-bottom: 2.4rem;
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: aside
+|-------------------------------------------------------------------------------------------------*/
+aside {
+  display: block;
+  margin-bottom: 2.4rem;
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: audio
+|-------------------------------------------------------------------------------------------------*/
+/*
+    1. Add the correct display in IE 9-.
+    2. Chrome 44-, iOS 8+, Safari 9+.
+*/
+audio {
+  display: inline-block;
+  /* 1 */
+  vertical-align: middle;
+}
+
+audio:not([controls]) {
+  display: none;
+  /* 2 */
+  height: 0;
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: b
+|-------------------------------------------------------------------------------------------------*/
+/*
+    1: Add the correct font weight in Chrome, Edge, and Safari.
+    2. Prevent increase in line-height in IE.
+*/
+b {
+  font-weight: bolder;
+  /* 1 */
+  line-height: 1;
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: blockquote
+|-------------------------------------------------------------------------------------------------*/
+blockquote {
+  margin-bottom: 2.4rem;
+  margin-left: 2.4rem;
+  font-style: italic;
+  /*
+        @TODO - set up vars and styles for the most common quote styles.
+        I.e. left-border, and enclosing quotes.
+    */
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: button
+|-------------------------------------------------------------------------------------------------*/
+button {
+  display: inline-block;
+  /* AK. IE9 needs this. Hmmm, for what exactly?*/
+  min-height: 3rem;
+  overflow: visible;
+  /* S: Internet Explorer 11-, N: Show the overflow in Edge, Firefox, and IE. */
+  margin: 0.3rem 0;
+  padding-top: 0.3rem;
+  padding-top: -moz-calc(0);
+  padding-top: calc(0.3rem - 1px);
+  padding-right: 0.6rem;
+  padding-bottom: 0.3rem;
+  padding-bottom: -moz-calc(0);
+  padding-bottom: calc(0.3rem - 1px);
+  padding-left: 0.6rem;
+  border-color: rgba(0, 0, 0, 0.2);
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 3px;
+  color: #fff;
+  background-color: #614776;
+  font-weight: inherit;
+  font-style: inherit;
+  font-size: inherit;
+  font-family: inherit;
+  line-height: 2.4rem;
+  vertical-align: middle;
+  text-transform: none;
+  /* [N0], N: Remove the inheritance of text transform in Edge, Firefox, and IE. */
+  cursor: pointer;
+  -ms-touch-action: manipulation;
+  /* 1 (IE10) */
+  touch-action: manipulation;
+  /* 1 */
+  -webkit-appearance: none;
+  /*@if $f__button-focus-outline-width != false {
+        &:hover,
+        &:active,
+        &:focus {
+            outline-width: $f__button-focus-outline-width;
+            outline-style: $f__button-focus-outline-style;
+            outline-color: $f__button-focus-outline-color;
+            outline-offset: $f__button-focus-outline-offset;
+        }
+    }*/
+}
+
+button:hover, button:active {
+  background-color: #473456;
+}
+
+button:focus {
+  outline: 0;
+  box-shadow: 0 0 0 3px rgba(97, 71, 118, 0.5);
+}
+
+_:-o-prefocus, :root button {
+  line-height: 2.4rem !important;
+}
+
+/*
+    FF15-
+
+    Remove the inner border and padding in Firefox and fix height.
+
+    Early FF doesn't correctly apply the box sizing to inputs (buttons?)
+    Adding margin to -moz-focus-inner helps to force the correct height.
+    It doesn't have any effect in newer FF.
+
+    NOTE: these adjustments don't seem very robust / dependent on font-family and font-size.
+*/
+button::-moz-focus-inner {
+  margin: -0.0625em 0;
+}
+
+/*
+    Reset for FF16+
+*/
+_:-moz-meter-optimum, :root button::-moz-focus-inner {
+  margin: 0;
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: canvas
+|-------------------------------------------------------------------------------------------------*/
+/*
+    1. Add the correct display in IE 9-.
+*/
+canvas {
+  display: inline-block;
+  /* 1 */
+  vertical-align: middle;
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: caption
+|-------------------------------------------------------------------------------------------------*/
+caption {
+  display: table-caption;
+  padding-top: 1.2rem;
+  padding-right: 1.2rem;
+  padding-bottom: 1.2rem;
+  padding-left: 1.2rem;
+  color: #fff;
+  background-color: #614776;
+  font-weight: bold;
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: code
+|-------------------------------------------------------------------------------------------------*/
+/*
+    1. Correct the inheritance and scaling of font size in all browsers. (N)
+    2. Address odd `em`-unit font size rendering in all browsers. (N)
+    3. Prevent the element increasing the line-height of the parent.
+*/
+code {
+  font-family: monospace, monospace;
+  /* 1 */
+  font-size: 1em;
+  /* 2 */
+  line-height: 0;
+  /* 3 */
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: dd
+|-------------------------------------------------------------------------------------------------*/
+dd {
+  margin-left: 3.6rem;
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: details
+|-------------------------------------------------------------------------------------------------*/
+details {
+  display: block;
+  /* N: IE 10/11 */
+}
+
+details > * {
+  box-sizing: border-box;
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: dfn
+|-------------------------------------------------------------------------------------------------*/
+/*
+    Address styling not present in Safari and Chrome. (N)
+*/
+dfn {
+  font-style: italic;
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: dl
+|-------------------------------------------------------------------------------------------------*/
+/*
+    1. Either of these will make lists behave properly next to floated items.
+       (https://paulbakaus.com/tutorials/css/block-formatting-contexts-and-lists)
+       a. This causes problems with some decoration. E.g. if the last element in the list is a link,
+          bottom borders get cropped, so using b instead.
+       b. `flow-root` is the better option but support is low, so using table.
+          Edge breaks if flow-root is applied, even though it's meant to be ignored.
+          -moz-box / flex causes numbering to mess up (always 0) on FF8-50.
+          This is the only thing that works in early FF. However, width is content-width, not
+          available width so any 'boxy' decoration on the list might look weird.
+          Flex based options cause other problems, i.e. not wrapping properly.
+
+*/
+dl {
+  margin-bottom: 2.4rem;
+  display: table;
+  /* 1b */
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: dt
+|-------------------------------------------------------------------------------------------------*/
+dt {
+  font-weight: bold;
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: em
+|-------------------------------------------------------------------------------------------------*/
+/*
+    1. De-italicize nested ems
+*/
+em em {
+  font-style: normal;
+  /* 1 */
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: fieldset
+|-------------------------------------------------------------------------------------------------*/
+/*
+    Fieldsets and legends can be difficult to style so I'm keeping their appearance basically the
+    same as the default - just a bit of theming.
+    More info here: https://thatemil.com/blog/2015/01/03/reset-your-fieldset/
+*/
+fieldset {
+  margin-bottom: 2.4rem;
+  min-width: 0;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #614776;
+  padding-top: 2.4rem;
+  padding-top: -moz-calc(2.4rem - 1px);
+  padding-top: calc(2.4rem - 1px);
+  padding-left: 2.4rem;
+  padding-left: -moz-calc(2.4rem - 1px);
+  padding-left: calc(2.4rem - 1px);
+  padding-right: 2.4rem;
+  padding-right: -moz-calc(2.4rem - 1px);
+  padding-right: calc(2.4rem - 1px);
+}
+
+fieldset::after {
+  display: block;
+  content: "";
+  height: 1px;
+  margin-top: 2.4rem;
+  margin-bottom: -1px;
+  margin-bottom: -moz-calc(-1px - 1px);
+  margin-bottom: calc(-1px - 1px);
+}
+
+fieldset fieldset {
+  margin: 0;
+  padding: 0;
+  border-width: 0;
+}
+
+fieldset fieldset::after {
+  display: none;
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: figcaption
+|-------------------------------------------------------------------------------------------------*/
+figcaption {
+  display: block;
+  font-size: 0.875em;
+}
+
+figcaption * {
+  margin-bottom: 0;
+}
+
+figcaption * + * {
+  margin-top: 1.2rem;
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: figure
+|-------------------------------------------------------------------------------------------------*/
+figure {
+  display: block;
+  margin-bottom: 2.4rem;
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: footer
+|-------------------------------------------------------------------------------------------------*/
+footer {
+  display: block;
+  margin-bottom: 2.4rem;
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: form
+|-------------------------------------------------------------------------------------------------*/
+form {
+  margin-bottom: 2.4rem;
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: header
+|-------------------------------------------------------------------------------------------------*/
+header {
+  display: block;
+  margin-bottom: 2.4rem;
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: hgroup
+|-------------------------------------------------------------------------------------------------*/
+hgroup {
+  display: block;
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: h
+|-------------------------------------------------------------------------------------------------*/
+h1 {
+  margin-bottom: 2.4rem;
+  font-size: 3.25em;
+  line-height: 6rem;
+}
+
+h2 {
+  margin-bottom: 2.4rem;
+  font-size: 2.5em;
+  line-height: 4.8rem;
+}
+
+h3 {
+  margin-bottom: 2.4rem;
+  font-size: 1.875em;
+  line-height: 3.6rem;
+}
+
+h4 {
+  margin-bottom: 2.4rem;
+  font-size: 1.375em;
+  line-height: 3.6rem;
+}
+
+h5 {
+  margin-bottom: 2.4rem;
+  font-size: 1.125em;
+  line-height: 2.4rem;
+}
+
+h6 {
+  margin-bottom: 2.4rem;
+  font-size: 1em;
+  line-height: 2.4rem;
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: hr
+|-------------------------------------------------------------------------------------------------*/
+/*
+    1. Show the overflow in Edge and IE. (N)
+*/
+hr {
+  height: 0;
+  overflow: visible;
+  /* 1 */
+  margin-top: -1px;
+  margin-bottom: 2.4rem;
+  border-top: none;
+  border-right: none;
+  border-bottom: 1px solid #614776;
+  border-left: none;
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: iframe
+|-------------------------------------------------------------------------------------------------*/
+iframe {
+  vertical-align: middle;
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: img
+|-------------------------------------------------------------------------------------------------*/
+/*
+    1. Fluid images for responsive purposes.
+    2. Remove the border on images inside links in IE 10-.
+    3. Offset `alt` text from surrounding copy.
+    4. Setting `vertical-align` removes the whitespace that appears under `img` elements when they
+       are dropped into a page as-is. Safer alternative to using `display: block;`.
+    5. Google Maps breaks if `max-width: 100%` acts upon it; use their selector to remove the
+       effects.
+    6. If a `width` and/or `height` attribute have been explicitly defined, let's not make the
+       image fluid.
+*/
+img {
+  max-width: 100%;
+  /* 1 */
+  border-style: none;
+  /* 2  */
+  font-style: italic;
+  /* 3 */
+  vertical-align: middle;
+  /* 4 */
+}
+
+.gm-style img, img[width], img[height] {
+  /* 6 */
+  max-width: none;
+}
+
+/*
+    Special treatment for images inside links.
+*/
+a img {
+  margin-bottom: -2px;
+  border-width: inherit;
+  border-style: inherit;
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: input
+|-------------------------------------------------------------------------------------------------*/
+/*
+    1. Allow inputs to contract to avoid braking containers:
+    2. Opera Mini needs this.
+    3. Remove the tapping delay from clickable elements (S)
+    4. Keep adjacent elements in the middle.
+    5. This helps prevent default 'normal' from increasing element height in webkit.
+*/
+input {
+  max-width: 100%;
+  /* 1 */
+  padding-top: 0.3rem;
+  /* 2 */
+  padding-top: calc(0.3rem - 1px);
+  padding-right: 0.6rem;
+  padding-bottom: 0.3rem;
+  /* 2 */
+  padding-bottom: calc(0.3rem - 1px);
+  padding-left: 0.6rem;
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+  color: #333;
+  background-color: #fff;
+  font-size: inherit;
+  font-weight: inherit;
+  font-style: inherit;
+  font-family: inherit;
+  -ms-touch-action: manipulation;
+  /* 3 (IE10) */
+  touch-action: manipulation;
+  /* 3 */
+  vertical-align: middle;
+  /* 4 */
+  line-height: inherit;
+  /* 5 */
+  min-height: 3rem;
+  margin: 0.3rem 0;
+}
+
+input:not([type]):focus,
+[type="color"]:focus,
+[type="date"]:focus,
+[type="datetime"]:focus,
+[type="datetime-local"]:focus,
+[type="file"]:focus,
+[type="month"]:focus,
+[type="number"]:focus,
+[type="password"]:focus,
+[type="search"]:focus,
+[type="range"]:focus,
+[type="tel"]:focus,
+[type="text"]:focus,
+[type="time"]:focus,
+[type="url"]:focus,
+[type="week"]:focus {
+  box-shadow: 0 0 0 3px rgba(97, 71, 118, 0.5);
+  outline: 0;
+}
+
+/*
+        Without custom styling (appearance: none), Safari doesn't apply the shadow, so breaks
+        accessibility ...
+    */
+[type="checkbox"]:focus,
+[type="radio"]:focus {
+  box-shadow: 0 0 0 3px rgba(97, 71, 118, 0.5);
+  outline: 0;
+}
+
+/*
+        ... so reinstating the outline:
+    */
+_::-webkit-full-page-media, _:future, :root [type="checkbox"]:focus,
+_::-webkit-full-page-media, _:future, :root [type="radio"]:focus {
+  outline: auto 5px -webkit-focus-ring-color;
+}
+
+/*
+    IE9 adds the border and background:
+*/
+[type="checkbox"],
+[type="radio"] {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+[type="button"],
+[type="reset"],
+[type="submit"] {
+  display: inline-block;
+  /* AK. IE9 needs this. Hmmm, for what exactly?*/
+  min-height: 3rem;
+  overflow: visible;
+  /* S: Internet Explorer 11-, N: Show the overflow in Edge, Firefox, and IE. */
+  margin: 0.3rem 0;
+  padding-top: 0.3rem;
+  padding-top: -moz-calc(0);
+  padding-top: calc(0.3rem - 1px);
+  padding-right: 0.6rem;
+  padding-bottom: 0.3rem;
+  padding-bottom: -moz-calc(0);
+  padding-bottom: calc(0.3rem - 1px);
+  padding-left: 0.6rem;
+  border-color: rgba(0, 0, 0, 0.2);
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 3px;
+  color: #fff;
+  background-color: #614776;
+  font-weight: inherit;
+  font-style: inherit;
+  font-size: inherit;
+  font-family: inherit;
+  line-height: 2.4rem;
+  vertical-align: middle;
+  text-transform: none;
+  /* [N0], N: Remove the inheritance of text transform in Edge, Firefox, and IE. */
+  cursor: pointer;
+  -ms-touch-action: manipulation;
+  /* 1 (IE10) */
+  touch-action: manipulation;
+  /* 1 */
+  -webkit-appearance: none;
+  /*@if $f__button-focus-outline-width != false {
+        &:hover,
+        &:active,
+        &:focus {
+            outline-width: $f__button-focus-outline-width;
+            outline-style: $f__button-focus-outline-style;
+            outline-color: $f__button-focus-outline-color;
+            outline-offset: $f__button-focus-outline-offset;
+        }
+    }*/
+}
+
+[type="button"]:hover, [type="button"]:active,
+[type="reset"]:hover,
+[type="reset"]:active,
+[type="submit"]:hover,
+[type="submit"]:active {
+  background-color: #473456;
+}
+
+[type="button"]:focus,
+[type="reset"]:focus,
+[type="submit"]:focus {
+  outline: 0;
+  box-shadow: 0 0 0 3px rgba(97, 71, 118, 0.5);
+}
+
+/*
+    IE10 makes the line-height massive with calc, but doesn't appear to need it anyway.
+*/
+[type="button"],
+[type="reset"],
+[type="submit"] {
+  line-height: 1\9;
+}
+
+/*
+    IE and Edge behave differently (both to other browsers and each other) and so min-height and
+    line-height settings don't seem consistent.
+
+    1. On smaller devices the width of these inputs can force horizontal scrolling.
+       Max-width doesn't work to solve this, but may be needed to restrict width on larger screens.
+    2. Make sure button corners aren't visible.
+*/
+[type="file"] {
+  width: 100%;
+  /* 1 */
+  max-width: 18.5em;
+  min-height: 3rem;
+  overflow: hidden;
+  /* 2 */
+  margin: 0.3rem 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+/*
+    Fix button height in Firefox.
+*/
+_:-moz-any-link, :root [type="file"] {
+  height: 3rem;
+}
+
+_:-ms-input-placeholder, :root [type="file"] {
+  background-color: #614776;
+}
+
+@media screen and (min-width: 0\0) and (min-resolution: 72dpi) {
+  [type="file"] {
+    padding-left: 0.6rem;
+  }
+}
+
+/*
+    iOS turns these inputs into selects which are a touch too high.
+*/
+[type="date"],
+[type="datetime-local"],
+[type="month"],
+[type="time"],
+[type="week"] {
+  height: 2.8rem;
+}
+
+/*
+    Remove extra padding in Chrome
+*/
+[type="date"]::-webkit-datetime-edit-fields-wrapper,
+[type="datetime-local"]::-webkit-datetime-edit-fields-wrapper,
+[type="month"]::-webkit-datetime-edit-fields-wrapper,
+[type="time"]::-webkit-datetime-edit-fields-wrapper,
+[type="week"]::-webkit-datetime-edit-fields-wrapper {
+  padding: 0;
+}
+
+/*
+    Tidy spin buttons and apply cursor:
+*/
+[type="date"]::-webkit-inner-spin-button,
+[type="datetime-local"]::-webkit-inner-spin-button,
+[type="month"]::-webkit-inner-spin-button,
+[type="number"]::-webkit-inner-spin-button,
+[type="time"]::-webkit-inner-spin-button,
+[type="week"]::-webkit-inner-spin-button {
+  height: auto;
+  cursor: pointer;
+}
+
+/**
+ * 1. Correct the odd appearance in Chrome and Safari.
+ * 2. Correct the outline style in Safari.
+ */
+[type="search"] {
+  -webkit-appearance: textfield;
+  /* 1 */
+  outline-offset: -2px;
+  /* 2 */
+}
+
+/**
+ * N: Remove the inner padding and cancel buttons in Chrome on OS X and
+ * Safari on OS X.
+ */
+[type="search"]::-webkit-search-cancel-button,
+[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+/*
+    Correct the text style on placeholders in Chrome, Edge, and Safari.
+*/
+::-webkit-input-placeholder {
+  color: inherit;
+  opacity: .54;
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: kbd
+|-------------------------------------------------------------------------------------------------*/
+/*
+    1. Correct the inheritance and scaling of font size in all browsers. (N)
+    2. Address odd `em`-unit font size rendering in all browsers. (N)
+    3. Prevent the element increasing the line-height of the parent.
+*/
+kbd {
+  font-family: monospace, monospace;
+  /* 1 */
+  font-size: 1em;
+  /* 2 */
+  line-height: 0;
+  /* 3 */
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: label
+|-------------------------------------------------------------------------------------------------*/
+/*
+    1. Remove the tapping delay from clickable elements.
+*/
+label {
+  display: inline-block;
+  padding-top: 0.6rem;
+  padding-bottom: 0.6rem;
+  font-weight: bold;
+  vertical-align: middle;
+  cursor: pointer;
+  -ms-touch-action: manipulation;
+  /* 1 (IE10) */
+  touch-action: manipulation;
+  /* 1 */
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: legend
+|-------------------------------------------------------------------------------------------------*/
+/*
+    Fieldsets and legends can be difficult to style so I'm keep their appearance basically the same
+    as the default - just a bit of theming.
+    More info here: https://thatemil.com/blog/2015/01/03/reset-your-fieldset/
+
+
+    1. Correct the text wrapping in Edge and IE.
+    2. Offset border width.
+    3. Correct the color inheritance from `fieldset` elements in IE.
+
+    Note $fieldset-border-width used deliberately (not $f__legend-border-width)- this is to account for
+    the fact that fieldset top border width is ignored if there's a legend so the spacing is wrong.
+*/
+legend {
+  display: table;
+  /* 1 */
+  max-width: 100%;
+  /* 1 */
+  margin-top: 0;
+  /* 2 */
+  margin-bottom: 1px;
+  /* 2 */
+  padding: 0 0.6rem;
+  border-width: 0;
+  color: inherit;
+  /* 3 */
+  font-weight: bold;
+  white-space: normal;
+  /* 1 */
+  /*  */
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: li
+|-------------------------------------------------------------------------------------------------*/
+li {
+  margin-left: 3.6rem;
+}
+
+li ul,
+li ol {
+  margin-bottom: 0;
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: main
+|-------------------------------------------------------------------------------------------------*/
+/*
+    1. Correct `block` display not defined for `main` in IE.
+*/
+main {
+  display: block;
+  /* 1 */
+  width: 100%;
+  min-height: 100%;
+  padding: 2.4rem;
+  background-color: #eee;
+  color: #333;
+  position: relative;
+  -webkit-flex: 1 0 auto;
+  -moz-box-flex: 1;
+  -ms-flex: 1 0 auto;
+  flex: 1 0 auto;
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: mark
+|-------------------------------------------------------------------------------------------------*/
+/*
+    Address styling not present in IE 8/9.
+*/
+mark {
+  background: #ff0;
+  color: #000;
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: nav
+|-------------------------------------------------------------------------------------------------*/
+nav {
+  display: block;
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: object
+|-------------------------------------------------------------------------------------------------*/
+object {
+  vertical-align: middle;
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: ol
+|-------------------------------------------------------------------------------------------------*/
+/*
+    1. Either of these will make lists behave properly next to floated items.
+       (https://paulbakaus.com/tutorials/css/block-formatting-contexts-and-lists)
+       a. This causes problems with some decoration. E.g. if the last element in the list is a link,
+          bottom borders get cropped, so using b instead.
+       b. `flow-root` is the better option but support is low, so using table.
+          Edge breaks if flow-root is applied, even though it's meant to be ignored.
+          -moz-box / flex causes numbering to mess up (always 0) on FF8-50.
+          This is the only thing that works in early FF. However, width is content-width, not
+          available width so any 'boxy' decoration on the list might look weird.
+          Flex based options cause other problems, i.e. not wrapping properly.
+
+*/
+ol {
+  margin-bottom: 2.4rem;
+  display: table;
+  /* 1b */
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: optgroup
+|-------------------------------------------------------------------------------------------------*/
+/*
+    1. The default cannot safely be changed in Chrome and Safari on OS X. ?? Not sure what this means now.
+*/
+optgroup {
+  color: #333;
+  background-color: #fff;
+  font-weight: bold;
+  /* 1 */
+  font-style: inherit;
+  font-size: inherit;
+  font-family: inherit;
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: option
+|-------------------------------------------------------------------------------------------------*/
+/*
+    1. This v-centers the text in FF and Chrome. Edge doesn't apply this but looks ok regardless.
+       Just IE9-11 to sort out?
+*/
+option {
+  display: flex;
+  /* 1 */
+  align-items: center;
+  /* 1 */
+  min-height: 2.4rem;
+  padding-right: 0.6rem;
+  padding-left: 0.6rem;
+  cursor: pointer;
+  background-color: #fff;
+}
+
+option:hover {
+  background-color: #c6b6d3;
+  color: #333;
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: p
+|-------------------------------------------------------------------------------------------------*/
+p {
+  margin-bottom: 2.4rem;
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: pre
+|-------------------------------------------------------------------------------------------------*/
+/*
+    Note: code is the most probable use for a `<pre>` tag. Other uses may occur (e.g. poem) but
+    these could be adjusted with a class. Could maybe make this default configurable but leave as it
+    is for now as it's likely that a poem would need a complete re-style (e.g. fonts etc.).
+
+    1. Keep scrollbar visible to maintain vertical rhythm.
+       Most browsers have a scrollbar height of 17px (calculated in settings section), however Edge
+       appears to have a scrollbar height of 12px, so we override it with a hack.
+    2. Correct the odd `em` font sizing in all browsers.
+    3. Correct the inheritance and scaling of font size in all browsers.
+*/
+pre {
+  overflow-x: scroll;
+  /* 1 */
+  overflow-y: auto;
+  /* 1 */
+  margin-bottom: calc-rem-from-px(31px);
+  /* 1 */
+  background-color: #ebe6f0;
+  /*1 */
+  font-size: 1em;
+  /* 2 */
+  font-family: monospace, monospace;
+  /* 3 */
+}
+
+@supports (-ms-ime-align: auto) {
+  pre {
+    margin-bottom: calc-rem-from-px(36px);
+    /* 1 */
+  }
+}
+
+/*
+        1. Revert zeroed line-height (see) `code`.
+    */
+pre code {
+  display: inline-block;
+  padding: 1.2rem;
+  line-height: 2.4rem;
+  /* 1 */
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: progress
+|-------------------------------------------------------------------------------------------------*/
+/*
+    1. Add the correct vertical alignment in Chrome, Firefox, and Opera.
+    2. Internet Explorer 11-, Windows Phone 8.1+
+*/
+progress {
+  display: inline-block;
+  /* 1 */
+  vertical-align: middle;
+  /* 2 */
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: samp
+|-------------------------------------------------------------------------------------------------*/
+/*
+    1. Address odd `em`-unit font size rendering in all browsers.
+    2. Correct the inheritance and scaling of font size in all browsers.
+    3. Prevent the element increasing the line-height of the parent.
+*/
+samp {
+  font-size: 1em;
+  /* 1 */
+  font-family: monospace, monospace;
+  /* 2 */
+  line-height: 0;
+  /* 3 */
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: section
+|-------------------------------------------------------------------------------------------------*/
+section {
+  display: block;
+  margin-bottom: 2.4rem;
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: select
+|-------------------------------------------------------------------------------------------------*/
+/*
+    1. Using height because min-height doesn't change the expand button height in FF.
+    2. For FF.
+    3. Remove the tapping delay from clickable elements.
+*/
+select {
+  height: 3rem;
+  /* 1 */
+  margin: 0.3rem 0;
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+  color: #333;
+  background-color: #fff;
+  font-weight: inherit;
+  font-style: inherit;
+  font-size: inherit;
+  font-family: inherit;
+  line-height: 2.4rem;
+  vertical-align: top;
+  /* 2 */
+  text-transform: none;
+  cursor: pointer;
+  -ms-touch-action: manipulation;
+  /* 3 (IE10) */
+  touch-action: manipulation;
+  /* 3 */
+}
+
+select::-ms-expand {
+  background-color: transparent;
+  color: #000;
+  border: 0;
+  padding-left: 0.6rem;
+  padding-right: 0.6rem;
+}
+
+select::-ms-value {
+  color: currentColor;
+}
+
+/*
+    Make the arrow indicator the same across browsers.
+
+    1. Give webkit extra padding.
+       (not sure this is the best way but it seems FF and IE add the option padding, but webkit
+       doesn't so this basically works)
+    2. Note - FF needs any # (e.g. fill colors) to be %23 encoded.
+    3. FF48- does not support background-position-x/y.
+    4. FF34- does not remove the arrow but also does not show the background image until FF29-, at
+       which point both are shown. However, removing the right-padding solves this (see below).
+*/
+select:not([multiple]) {
+  padding-left: 0.3rem;
+  -webkit-padding-start: 0.6rem;
+  /* 1 */
+  padding-right: 2.4rem;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4.95 10" fill="%23444"><polygon points="1.41 4.67 2.48 3.18 3.54 4.67 1.41 4.67"/><polygon points="3.54 5.33 2.48 6.82 1.41 5.33 3.54 5.33"/></svg>');
+  /* 2 */
+  background-repeat: no-repeat;
+  background-position: right 0.3em bottom 0;
+  /* 3 */
+  -moz-appearance: none;
+  /* 4 */
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/*
+    We need to remove right padding before FF34, but there isn't a hack for that.
+    So instead, remove for all FireFox ...
+*/
+_:-moz-tree-row(hover), select:not([multiple]) {
+  padding-right: 0;
+}
+
+/*
+    ... and reinstate for FF35+
+*/
+@supports (-moz-appearance: none) and (mask-type: alpha) {
+  select:not([multiple]) {
+    padding-right: 2.4rem;
+  }
+}
+
+/*
+    Undo custom arrow indicator for IE9-11:
+*/
+/* IE9-11 */
+@media screen and (min-width: 0\0) and (min-resolution: +72dpi) {
+  select:not([multiple]) {
+    background-image: none\0;
+    padding-right: 0\0;
+  }
+}
+
+select:focus {
+  box-shadow: 0 0 0 3px rgba(97, 71, 118, 0.5);
+  outline: 0;
+}
+
+/*
+    Note that Opera 25- and Safari(all - 11 latest at time of writing) treat select [size]s of
+    less than 4 as 4.
+*/
+select[multiple] {
+  height: auto;
+  margin-top: 0.3rem;
+  margin-right: 0;
+  margin-bottom: -moz-calc(0.9rem - 2px);
+  margin-bottom: calc(0.9rem - 2px);
+  margin-left: 0;
+}
+
+/*
+    Apply padding to fudge height in Safari (we need to apply to iOS)...
+*/
+_::-webkit-full-page-media, _:future, :root select[multiple] {
+  margin-bottom: 0;
+  padding: 0.2rem;
+}
+
+/*
+    ... but reset for Mac Safari .
+*/
+_:-webkit-full-screen, _::-webkit-full-page-media, _:future, :root select[multiple] {
+  margin-bottom: calc(0.9rem - 2px);
+  padding: 0;
+}
+
+/*
+    Various browsers do not allow <option>s height to be specified.
+    The ones I've found are:
+
+    * IE11-
+    * Chrome 38-
+    * Opera 24-
+
+    MAYBE NOT FOR PRODUCTION?
+    The following techniques are messy and break if the font-family or font size changes.
+    Maybe move them to the test CSS only so I can see if OTHER elements are falling off the grid.
+*/
+/* Individual height fixes moved to '_start-experimental.scss' */
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: small
+|-------------------------------------------------------------------------------------------------*/
+/*
+    1. Apply consistent small font size in all browsers.
+    2. Prevent the element increasing the line-height of the parent.
+*/
+small {
+  font-size: 80%;
+  /* 1 */
+  line-height: normal;
+  /* 2 */
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: strong
+|-------------------------------------------------------------------------------------------------*/
+/*
+    1. Add the correct font weight in Chrome, Edge, and Safari.
+    2. Prevent increase in line-height.
+*/
+strong {
+  font-weight: bolder;
+  /* 1 */
+  line-height: normal;
+  /* 2 */
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: sub
+|-------------------------------------------------------------------------------------------------*/
+/*
+    Prevent `sub` affecting `line-height` in all browsers.
+*/
+sub {
+  position: relative;
+  bottom: -0.25em;
+  font-size: 75%;
+  line-height: 0;
+  vertical-align: baseline;
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: summary
+|-------------------------------------------------------------------------------------------------*/
+/*
+    1. Correct display in unsupported browsers (https://caniuse.com/#feat=details).
+    2. Remove the tapping delay from clickable elements.
+*/
+summary {
+  display: block;
+  /* 1 */
+  -ms-touch-action: manipulation;
+  /* 2 (IE10) */
+  touch-action: manipulation;
+  /* 2 */
+  cursor: pointer;
+}
+
+summary:focus {
+  outline: 2px solid rgba(97, 71, 118, 0.6);
+  outline-offset: 2px;
+}
+
+/* Hide the details marker as we're supplying our own. */
+summary::-webkit-details-marker {
+  display: none;
+}
+
+details > summary::before {
+  display: inline-block;
+  content: '\25BA';
+  margin-right: 0.5em;
+  font-size: 0.75em;
+  font-family: serif;
+  vertical-align: top;
+  transition: transform 0.2s ease;
+}
+
+details[open] > summary::before {
+  transform: rotate(90deg);
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: sup
+|-------------------------------------------------------------------------------------------------*/
+/*
+    Prevent `sup` affecting `line-height` in all browsers.
+*/
+sup {
+  position: relative;
+  top: -0.5em;
+  font-size: 75%;
+  line-height: 0;
+  vertical-align: baseline;
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: svg
+|-------------------------------------------------------------------------------------------------*/
+/*
+    1. Change the fill color to match the text color in all browsers.
+       (needs more testing)
+
+    2. iOS7 (at least) adds a mystery top margin.
+*/
+svg {
+  vertical-align: middle;
+  fill: currentColor;
+  /* 1 */
+  margin-top: 0;
+}
+
+/*
+    1. Correct overflow not hidden in IE 9-11.
+*/
+svg:not(:root) {
+  overflow: hidden;
+  /* 1 */
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: table
+|-------------------------------------------------------------------------------------------------*/
+/*
+    1. Opera Mini (no calc support).
+    2. Calc to deduct any border-width.
+*/
+table {
+  width: 100%;
+  /* @TODO - possibly make this configurable to be 'natural' width but centered instead. (http://alistapart.com/article/web-typography-tables) */
+  border-collapse: collapse;
+  margin-bottom: 2.4rem;
+  /* 1 */
+  margin-bottom: calc(2.4rem - 1px);
+  /* 2 */
+  border: 1px solid #614776;
+  background-color: #dfd6e6;
+  border-spacing: 0;
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: td
+|-------------------------------------------------------------------------------------------------*/
+/*
+    1. Opera Mini (no calc support).
+    2. Calc to deduct any border-width.
+*/
+td {
+  padding-top: 1.2rem;
+  padding-right: 1.2rem;
+  padding-bottom: 1.2rem;
+  /* 1 */
+  padding-bottom: calc(1.2rem - 1px);
+  /* 2 */
+  padding-left: 1.2rem;
+  border: 1px solid #614776;
+  background-color: #fff;
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: template
+|-------------------------------------------------------------------------------------------------*/
+/*
+    1. Hide `template` in unsupported browsers (https://caniuse.com/#feat=template)
+*/
+template {
+  display: none;
+  /* 1 */
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: textarea
+|-------------------------------------------------------------------------------------------------*/
+/*
+    1. For IE, mainly.
+    2. Edge 12+, Internet Explorer 11-. Without this it acts like overflow: scroll.
+    3. Remove the margin in Firefox and Safari.
+    4. Keep labels at the top of the container.
+    5. Remove the tapping delay from clickable elements.
+    5a. IE 10.
+*/
+textarea {
+  min-height: 8.2rem;
+  /* 1 */
+  overflow: auto;
+  /* 2 */
+  margin-top: 0.2rem;
+  margin-bottom: 0;
+  /* 3 */
+  padding-left: 0.6rem;
+  padding-right: 0.6rem;
+  border-width: 1px;
+  border-radius: 3px;
+  border-color: rgba(0, 0, 0, 0.2);
+  border-style: solid;
+  color: #333;
+  background-color: #fff;
+  font-size: inherit;
+  font-family: inherit;
+  font-style: inherit;
+  font-weight: inherit;
+  vertical-align: top;
+  /* 4 */
+  -ms-touch-action: manipulation;
+  /* 5a */
+  touch-action: manipulation;
+  /* 5 */
+  resize: vertical;
+}
+
+textarea:focus {
+  box-shadow: 0 0 0 3px rgba(97, 71, 118, 0.5);
+  outline: 0;
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: th
+|-------------------------------------------------------------------------------------------------*/
+/*
+    1. Opera Mini (no calc support).
+    2. Calc to deduct any border-width.
+*/
+th {
+  padding-top: 1.2rem;
+  padding-right: 1.2rem;
+  padding-bottom: 1.2rem;
+  /* 1 */
+  padding-bottom: calc(1.2rem - 1px);
+  /* 2 */
+  padding-left: 1.2rem;
+  border: 1px solid #614776;
+  background-color: #dfd6e6;
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: ul
+|-------------------------------------------------------------------------------------------------*/
+/*
+    1. Either of these will make lists behave properly next to floated items.
+       (https://paulbakaus.com/tutorials/css/block-formatting-contexts-and-lists)
+       a. This causes problems with some decoration. E.g. if the last element in the list is a link,
+          bottom borders get cropped, so using b instead.
+       b. `flow-root` is the better option but support is low, so using table.
+          Edge breaks if flow-root is applied, even though it's meant to be ignored.
+          -moz-box / flex causes numbering to mess up (always 0) on FF8-50.
+          This is the only thing that works in early FF. However, width is content-width, not
+          available width so any 'boxy' decoration on the list might look weird.
+          Flex based options cause other problems, i.e. not wrapping properly.
+
+*/
+ul {
+  margin-bottom: 2.4rem;
+  display: table;
+  /* 1b */
+}
+
+/*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: video
+|-------------------------------------------------------------------------------------------------*/
+/*
+    1. Allow video to center if container larger than video.
+*/
+video {
+  display: block;
+  /* 1 */
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+  /* 1 */
+  background-color: #333;
+}
+
+/*
+    1. Remove the tapping delay from clickable elements.
+*/
+[tabindex] {
+  -ms-touch-action: manipulation;
+  /* 1 (IE10) */
+  touch-action: manipulation;
+  /* 1 */
+}
+
+/*
+    Specify the background color, font color, and drop shadow of text selections.
+*/
+::-moz-selection,
+::selection {
+  color: #fff;
+  background-color: #ad96c0;
+  text-shadow: none;
+}
+
+/*! End Start-CSS */
+/*! Start CSS Classes. See SCSS file for documentation. */
+/*------------------------------------------------------------------------------------------------*\
+
+    Classes
+
+\*------------------------------------------------------------------------------------------------*/
+/*
+    Resources:
+    *
+*/
+/*
+        "Buttons" or "CTAs" that are really links should be distinguished from real buttons, so by
+        default we're swapping the foreground and background colors:
+    */
+a[href].button,
+a[href].cta {
+  display: inline-block;
+  /* AK. IE9 needs this. Hmmm, for what exactly?*/
+  min-height: 3rem;
+  overflow: visible;
+  /* S: Internet Explorer 11-, N: Show the overflow in Edge, Firefox, and IE. */
+  margin: 0.3rem 0;
+  padding-top: 0.3rem;
+  padding-top: -moz-calc(0);
+  padding-top: calc(0.3rem - 1px);
+  padding-right: 0.6rem;
+  padding-bottom: 0.3rem;
+  padding-bottom: -moz-calc(0);
+  padding-bottom: calc(0.3rem - 1px);
+  padding-left: 0.6rem;
+  border-color: #614776;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 3px;
+  color: #614776;
+  background-color: #fff;
+  font-weight: inherit;
+  font-style: inherit;
+  font-size: inherit;
+  font-family: inherit;
+  line-height: 2.4rem;
+  vertical-align: middle;
+  text-transform: none;
+  /* [N0], N: Remove the inheritance of text transform in Edge, Firefox, and IE. */
+  cursor: pointer;
+  -ms-touch-action: manipulation;
+  /* 1 (IE10) */
+  touch-action: manipulation;
+  /* 1 */
+  -webkit-appearance: none;
+  /*@if $f__button-focus-outline-width != false {
+        &:hover,
+        &:active,
+        &:focus {
+            outline-width: $f__button-focus-outline-width;
+            outline-style: $f__button-focus-outline-style;
+            outline-color: $f__button-focus-outline-color;
+            outline-offset: $f__button-focus-outline-offset;
+        }
+    }*/
+}
+
+a[href].button:hover, a[href].button:active,
+a[href].cta:hover,
+a[href].cta:active {
+  background-color: white;
+}
+
+a[href].button:focus,
+a[href].cta:focus {
+  outline: 0;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5);
+}
+
+a[href].button:hover, a[href].button:active, a[href].button:focus,
+a[href].cta:hover,
+a[href].cta:active,
+a[href].cta:focus {
+  background-color: #ebe6f0;
+}
+
+a[href].button--has-icon,
+a[href].cta--has-icon {
+  position: relative;
+}
+
+a[href].button--has-icon::after,
+a[href].cta--has-icon::after {
+  content: "";
+  display: inline;
+  padding-left: 1.25em;
+  line-height: 0;
+}
+
+a[href].button--has-icon .icon,
+a[href].cta--has-icon .icon {
+  position: absolute;
+  bottom: 0;
+  transform: translateY(-15%);
+}
+
+.button[data-text][aria-hidden="true"] {
+  display: inline-block;
+  /* AK. IE9 needs this. Hmmm, for what exactly?*/
+  min-height: 3rem;
+  overflow: visible;
+  /* S: Internet Explorer 11-, N: Show the overflow in Edge, Firefox, and IE. */
+  margin: 0.3rem 0;
+  padding-top: 0.3rem;
+  padding-top: -moz-calc(0);
+  padding-top: calc(0.3rem - 1px);
+  padding-right: 0.6rem;
+  padding-bottom: 0.3rem;
+  padding-bottom: -moz-calc(0);
+  padding-bottom: calc(0.3rem - 1px);
+  padding-left: 0.6rem;
+  border-color: rgba(0, 0, 0, 0.2);
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 3px;
+  color: #fff;
+  background-color: #614776;
+  font-weight: inherit;
+  font-style: inherit;
+  font-size: inherit;
+  font-family: inherit;
+  line-height: 2.4rem;
+  vertical-align: middle;
+  text-transform: none;
+  /* [N0], N: Remove the inheritance of text transform in Edge, Firefox, and IE. */
+  cursor: pointer;
+  -ms-touch-action: manipulation;
+  /* 1 (IE10) */
+  touch-action: manipulation;
+  /* 1 */
+  -webkit-appearance: none;
+  /*@if $f__button-focus-outline-width != false {
+        &:hover,
+        &:active,
+        &:focus {
+            outline-width: $f__button-focus-outline-width;
+            outline-style: $f__button-focus-outline-style;
+            outline-color: $f__button-focus-outline-color;
+            outline-offset: $f__button-focus-outline-offset;
+        }
+    }*/
+}
+
+.button[data-text][aria-hidden="true"]:hover, .button[data-text][aria-hidden="true"]:active {
+  background-color: #473456;
+}
+
+.button[data-text][aria-hidden="true"]:focus {
+  outline: 0;
+  box-shadow: 0 0 0 3px rgba(97, 71, 118, 0.5);
+}
+
+.button[data-text][aria-hidden="true"]::before {
+  content: attr(data-text);
+}
+
+.bordered {
+  border-width: 6px;
+  border-style: solid;
+  border-color: #614776;
+  padding-top: 24px;
+  padding-top: -moz-calc(24px - 6px);
+  padding-top: calc(24px - 6px);
+  padding-left: 24px;
+  padding-left: -moz-calc(24px - 6px);
+  padding-left: calc(24px - 6px);
+  padding-right: 24px;
+  padding-right: -moz-calc(24px - 6px);
+  padding-right: calc(24px - 6px);
+}
+
+.bordered::after {
+  display: block;
+  content: "";
+  height: 1px;
+  margin-top: 24px;
+  margin-bottom: -1px;
+  margin-bottom: -moz-calc(-1px - 6px);
+  margin-bottom: calc(-1px - 6px);
+}
+
+.padded {
+  border-width: 0px;
+  border-style: solid;
+  border-color: #614776;
+  padding-top: 2.4rem;
+  padding-top: -moz-calc(2.4rem - 0px);
+  padding-top: calc(2.4rem - 0px);
+  padding-left: 2.4rem;
+  padding-left: -moz-calc(2.4rem - 0px);
+  padding-left: calc(2.4rem - 0px);
+  padding-right: 2.4rem;
+  padding-right: -moz-calc(2.4rem - 0px);
+  padding-right: calc(2.4rem - 0px);
+}
+
+.padded::after {
+  display: block;
+  content: "";
+  height: 1px;
+  margin-top: 2.4rem;
+  margin-bottom: -1px;
+  margin-bottom: -moz-calc(-1px - 0px);
+  margin-bottom: calc(-1px - 0px);
+}
+
+/*
+        1. Prevent element increasing height of parent.
+    */
+b.subtitle {
+  font-size: 0.8em;
+  font-weight: inherit;
+  font-style: normal;
+  line-height: 1;
+  /* 1 */
+}
+
+/*
+        1. Negate heading margin.
+    */
+p.subtitle {
+  font-size: 1.5em;
+  font-weight: inherit;
+  margin-top: -1.2rem;
+  /* 1 */
+}
+
+/*
+        1. Negate heading margin.
+    */
+.tagline {
+  font-size: 1.14285714286em;
+  margin-top: -1.2rem;
+  /* 1 */
+}
+
+/*
+        1. Collapse whitespace.
+        2. Prevent extra height being added.
+    */
+.composite {
+  display: -webkit-inline-box;
+  /* 1 */
+  display: -ms-inline-flexbox;
+  /* 1 */
+  display: inline-flex;
+  /* 1 */
+  vertical-align: middle;
+  /* 2 */
+  max-width: 100%;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+
+/*
+        1. Prevent extra height being added.
+    */
+.composite > * {
+  vertical-align: top;
+  /* 1 */
+  -webkit-flex: 0 1 auto;
+  -ms-flex: 0 1 auto;
+  flex: 0 1 auto;
+}
+
+/*
+        IE9
+
+        1. Make sure there are no spaces between elements in the markup as the as the white space won't
+           collapse.
+
+        2. Hide button.
+    */
+@media screen and (min-width: 0\0) and (min-resolution: 0.001dpcm) {
+  .composite {
+    display: inline-block;
+    /* 1 */
+    white-space: nowrap;
+    /* 1 */
+    overflow: hidden;
+    /* 2 */
+  }
+  .composite > * {
+    vertical-align: top;
+    display: inline-block;
+  }
+}
+
+.composite > *:not(:first-child) {
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+
+.composite > *:not(:last-child) {
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  border-right: 0 !important;
+}
+
+/* CUSTOM INPUTS: RADIOS AND CHECKBOXES */
+/* Hide the real inputs: */
+/* (note this method is important to persist accessibility and keyboard navigation) */
+.custom-input[type="checkbox"],
+.custom-input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+}
+
+/* Prepare for positioning the pseudo-elements: */
+.custom-input-label {
+  position: relative;
+  vertical-align: top;
+  /*display: -webkit-inline-flex;
+        display: -ms-inline-flexbox;
+        display: inline-flex;
+        -webkit-align-items: center;
+             -ms-flex-align: center;
+               align-items: center;*/
+  padding-left: 1.5em;
+}
+
+.custom-input:focus + .custom-input-label::before {
+  box-shadow: 0 0 0 2px #9476ad;
+  outline: 0;
+}
+
+/* Common psuedo-element styles: */
+.custom-input[type="checkbox"] + .custom-input-label::before,
+.custom-input[type="radio"] + .custom-input-label::before {
+  display: inline-block;
+  content: "";
+  width: 1em;
+  height: 1em;
+  background: #ccc;
+  border-radius: 2px;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  -webkit-transform: translate(0px, -53%);
+  -ms-transform: translate(0px, -53%);
+  transform: translate(0px, -53%);
+}
+
+/* Make the radio elements circular: */
+.custom-input[type="radio"] + .custom-input-label::before {
+  border-radius: 50%;
+}
+
+/* Define the checkbox :checked state: */
+.custom-input[type="checkbox"]:checked + .custom-input-label::before {
+  background: #614776;
+}
+
+/* Define the checkbox 'tick': */
+.custom-input[type="checkbox"]:checked + .custom-input-label::after {
+  content: "";
+  display: inline-block;
+  width: 0.6em;
+  height: 0.3em;
+  border: solid #fff;
+  border-width: 0 0 0.2em 0.2em;
+  position: absolute;
+  left: 0.22em;
+  top: 50%;
+  -webkit-transform: translate(0px, -80%) rotate(-50deg);
+  -ms-transform: translate(0px, -80%) rotate(-50deg);
+  transform: translate(0px, -80%) rotate(-50deg);
+}
+
+/* Define the radio 'dot': */
+.custom-input[type="radio"]:checked + .custom-input-label::before {
+  background: #fff;
+  border-color: #614776;
+  border-width: 0.25em;
+  border-style: solid;
+}
+
+/* Adjustments for end (right) alignment: */
+.custom-input--align-end[type="checkbox"] + .custom-input-label,
+.custom-input--align-end[type="radio"] + .custom-input-label {
+  padding-left: 0;
+  padding-right: 1.5em;
+}
+
+.custom-input--align-end[type="checkbox"] + .custom-input-label::before,
+.custom-input--align-end[type="radio"] + .custom-input-label::before {
+  left: auto;
+  right: 0;
+}
+
+.custom-input--align-end[type="checkbox"]:checked + .custom-input-label::after {
+  left: auto;
+  right: 0.16em;
+}
+
+/* CUSTOM INPUTS: FILE */
+/* -webkit hide the button: */
+.custom-input[type="file"]::-webkit-file-upload-button {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  width: 0;
+  background: transparent;
+}
+
+/* Firefox hide the button: */
+@supports (-moz-appearance: meterbar) {
+  .custom-input[type=file] {
+    text-indent: -5.6em;
+    padding-right: 0.375rem;
+  }
+}
+
+/* IE10-11, Edge hide the button: */
+.custom-input[type=file]::-ms-browse {
+  padding: 0;
+  margin: -1px;
+  width: 0;
+  border: 0;
+  background: transparent;
+}
+
+/* IE9 hide the button: (https://jeffclayton.wordpress.com/2014/07/22/internet-explorer-css-hacks-collection/) */
+@media screen and (min-width: 0\0) and (min-resolution: 0.001dpcm) {
+  /*
+                So far I haven't managed to get this arrangement working properly in IE9, so hiding it:
+            */
+  .button + .custom-input[type=file] {
+    margin-left: -5.35em;
+  }
+  .custom-input[type="file"] + .button {
+    min-width: 7em;
+    margin-left: -7em;
+    text-align: center;
+  }
+}
+
+.poem {
+  font-family: cursive;
+  background: #fff;
+  overflow: auto;
+  margin-bottom: 2.4rem;
+}
+
+/*! Start CSS Accessibility. See SCSS file for documentation. */
+/*------------------------------------------------------------------------------------------------*\
+
+    ACCESSIBILITY / ARIA
+
+\*------------------------------------------------------------------------------------------------*/
+[aria-busy="true"] {
+  cursor: progress;
+}
+
+/*
+    Specify the pointer cursor of trigger elements. (S)
+*/
+[aria-controls] {
+  cursor: pointer;
+}
+
+/*
+    Specify the un-styled cursor of disabled, not-editable, or otherwise inoperable elements. (S)
+*/
+[disabled],
+[aria-disabled] {
+  cursor: default;
+}
+
+/*
+    Address `[hidden]` styling not present in IE 8/9/10. (N)
+*/
+[hidden] {
+  display: none;
+}
+
+/*
+    Specify the style of visually hidden yet accessible elements. (S)
+*/
+[hidden][aria-hidden="false"] {
+  clip: rect(0 0 0 0);
+  position: absolute;
+  display: inline;
+  /*border: 0;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    width: 1px;*/
+}
+
+a[hidden][aria-hidden="false"]:focus,
+a[hidden][aria-hidden="false"]:active {
+  clip: auto;
+  position: static;
+  /*height: auto;
+        margin: 0;
+        overflow: visible;
+        width: auto;*/
+}
+
+/*! Start CSS Utilities. See SCSS file for documentation. */
+/*------------------------------------------------------------------------------------------------*\
+
+    UTILITIES
+
+\*------------------------------------------------------------------------------------------------*/
+/*
+    Clearfix: contain floats for modern browsers
+
+    1. The space content is one way to avoid an Opera bug when the `contenteditable` attribute is #
+       included anywhere else in the document.
+       Otherwise it causes space to appear at the top and bottom of elements that receive the#
+       `clearfix` class.
+
+    2. The use of `table` rather than `block` is only necessary if using
+       `:before` to contain the top-margins of child elements.
+*/
+.clearfix:before,
+.clearfix:after {
+  content: " ";
+  /* 1 */
+  display: table;
+  /* 2 */
+}
+
+.clearfix,
+.clearfix:after {
+  clear: both;
+}
+
+.no-css-only {
+  display: none;
+}
+
+/*! Start CSS Icons. See SCSS file for documentation. */
+/*------------------------------------------------------------------------------------------------*\
+
+    Icons
+
+\*------------------------------------------------------------------------------------------------*/
+/*
+
+    This default icon set used Feather Icons (https://feathericons.com/)
+    If you want to use a different icon set, omit the @import declaration for this file and replace
+    it with a custom one.
+
+    <!-- At the top of each page: -->
+    <svg xmlns="http://www.w3.org/2000/svg" display="none">
+        <symbol id="icon-building" viewBox="0 0 24 24">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </symbol>
+        <symbol id="icon-calendar" viewBox="0 0 24 24">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+        </symbol>
+        <symbol id="icon-chevron-down" viewBox="0 0 24 24">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </symbol>
+        <symbol id="icon-chevron-up" viewBox="0 0 24 24">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </symbol>
+        <symbol id="icon-chevron-left" viewBox="0 0 24 24">
+            <polyline points="15 18 9 12 15 6"></polyline>
+        </symbol>
+        <symbol id="icon-chevron-right" viewBox="0 0 24 24">
+            <polyline points="9 18 15 12 9 6"></polyline>
+        </symbol>
+        <symbol id="icon-cross" viewBox="0 0 24 24">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+        </symbol>
+        <symbol id="icon-email" viewBox="0 0 24 24">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+            <polyline points="22,6 12,13 2,6"></polyline>
+        </symbol>
+        <symbol id="icon-facebook" viewBox="0 0 24 24">
+            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+        </symbol>
+        <symbol id="icon-fax" viewBox="0 0 24 24">
+            <path class="st0" d="M6,18H4c-1.1,0-2-0.7-2-1.6v-4c0-0.9,0.9-1.6,2-1.6h16c1.1,0,2,0.7,2,1.6v4c0,0.9-0.9,1.6-2,1.6h-2"/>
+            <rect x="6" y="14" class="st0" width="12" height="8"/>
+            <path class="st0" d="M6,7.4L4.8,6.2C4.4,5.7,4.4,5,4.8,4.6c0,0,0.1,0,0.1-0.1c1.4-1.1,3-1.9,4.7-2.2c1.6-0.4,3.2-0.4,4.8,0 c1.7,0.4,3.3,1.1,4.7,2.2c0.5,0.4,0.5,1.1,0.1,1.6c0,0,0,0.1-0.1,0.1L18,7.4c-0.4,0.4-1,0.5-1.5,0.1c-0.4-0.3-0.9-0.6-1.4-0.8 c-0.4-0.2-0.7-0.6-0.7-1v-1c-1.6-0.4-3.2-0.4-4.8,0v1c0,0.4-0.3,0.8-0.7,1C8.4,6.9,8,7.2,7.5,7.5C7.1,7.8,6.4,7.8,6,7.4z"/>
+        </symbol>
+        <symbol id="icon-file" viewBox="0 0 24 24">
+            <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+            <polyline points="13 2 13 9 20 9"></polyline>
+        </symbol>
+        <symbol id="icon-linkedin" viewBox="0 0 24 24">
+            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+            <rect x="2" y="9" width="4" height="12">
+            </rect><circle cx="4" cy="4" r="2"></circle>
+        </symbol>
+        <symbol id="icon-menu" viewBox="0 0 24 24">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+        </symbol>
+        <symbol id="icon-person" viewBox="0 0 24 24">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+        </symbol>
+        <symbol id="icon-phone" viewBox="0 0 24 24">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+        </symbol>
+        <symbol id="icon-twitter" viewBox="0 0 24 24">
+            <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path>
+        </symbol>
+     </svg>
+
+
+
+    <!-- Where it's needed: -->
+    <svg display="none" class="icon" aria-label="Spoken label"><use xlink:href="#icon-triangle-down"></use></svg>
+    <!-- Note the aria-label can be removed if equivelent text is already present or the icon is visual only -->
+
+*/
+/*
+        1. Override display attribute.
+        2. FF55- otherwise fill is applied.
+    */
+.icon {
+  display: inline;
+  /* [1] */
+  fill: none;
+  fill-opacity: 0;
+  /* [2] */
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  width: 1.25em;
+  height: 1.25em;
+  margin: 0;
+  padding: 0;
+}
+
+_:-o-prefocus, :root .icon {
+  vertical-align: middle;
+}
+
+.icon-wrap {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+
+/*! Start CSS Experimental. See SCSS file for documentation. */
+/*------------------------------------------------------------------------------------------------*\
+
+    Experimental
+
+\*------------------------------------------------------------------------------------------------*/
+/*
+    From https://github.com/mozdevs/cssremedy/blob/master/remedy.css
+    Immediately jump any animation to the end point if the user has set their device to "prefers
+    reduced motion".
+    This could create bad, unintended consequences. Remove as needed, and write your own appropriate
+    code for prefers-reduced-motion.
+
+*/
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001s !important;
+    transition-duration: 0.001s !important;
+  }
+}
+
+/*
+    MS pseudo-elements.
+
+    Note - there's some odd spacing issues between the containing element and the pseudo-elements,
+    where background colors can show through unexpectedly, so there are some tweaks to rectify
+    this.
+*/
+[type="file"]::-ms-value {
+  margin-right: 0;
+  margin-left: -6px;
+  padding-left: 0.5em;
+  border: 0;
+  border-radius: 3px;
+  background: #fff;
+}
+
+@supports (-ms-ime-align: auto) {
+  [type="file"]::-ms-value {
+    background: transparent;
+  }
+}
+
+[type="file"]:focus::-ms-value {
+  box-shadow: true;
+  outline: 0;
+}
+
+/*
+    1. IE10 doesn't like rem so convert to px.
+*/
+[type="file"]::-ms-browse {
+  min-height: 3rem;
+  padding-right: 0.6rem;
+  padding-right: 6px\9;
+  /* 1 */
+  padding-left: 0.6rem;
+  padding-left: 6px\9;
+  /* 1 */
+  border-width: 0 0 0 1px;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.2);
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+  color: #fff;
+  background-color: #614776;
+  font-weight: inherit;
+  font-style: inherit;
+  font-size: inherit;
+  font-family: inherit;
+  text-transform: none;
+  cursor: pointer;
+}
+
+[type="file"]:hover::-ms-browse,
+[type="file"]:active::-ms-browse,
+[type="file"]:focus::-ms-browse {
+  box-shadow: true;
+  outline: 0;
+}
+
+/*
+    1. Spacing height + 2 sets of input padding, minus border width.
+*/
+[type="file"]::-webkit-file-upload-button {
+  height: calc(3rem - 2px);
+  /* 1 */
+  padding-top: 0;
+  padding-right: 0.6rem;
+  padding-bottom: 0;
+  padding-left: 0.6rem;
+  border-width: 0 1px 0 0;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.2);
+  border-radius: 0;
+  color: #fff;
+  background-color: #614776;
+  font-weight: inherit;
+  font-style: inherit;
+  font-size: inherit;
+  font-family: inherit;
+  vertical-align: top;
+  text-transform: none;
+  cursor: pointer;
+  -webkit-appearance: none;
+}
+
+[type="file"]:hover::-webkit-file-upload-button,
+[type="file"]:active::-webkit-file-upload-button,
+[type="file"]:focus::-webkit-file-upload-button {
+  box-shadow: true;
+  outline: 0;
+}
+
+/*
+    Safari refuses to adjust the height of select[multiple] options.
+    The only way I've managed to get it to adhere to the vertical rhythm is by adjust the font-size
+    on the select:
+    select[multiple] {
+        font-size: 20px;
+        margin-bottom: 8px;
+    }
+
+    This is no good, of course as it makes the text HUGE. Scaling it back with transform works:
+
+        transform-origin: top;
+        transform: scale(0.7);
+
+    but of course the gaps around it are huge as well.
+
+    Hand-adjusting margins here so I can test the rest of the elements on grid properly and moving
+    on:
+*/
+/*
+_:scope, _:future, _:not(*:root), select[size="2"]  { margin-bottom: 0; }
+_:scope, _:future, _:not(*:root), select[size="3"]  { margin-bottom: 0; }
+_:scope, _:future, _:not(*:root), select[size="4"]  { margin-bottom: 0; }
+_:scope, _:future, _:not(*:root), select[size="5"]  { margin-bottom: calc(0.9rem - 2px); }
+_:scope, _:future, _:not(*:root), select[size="6"]  { margin-bottom: calc(0.4rem - 2px); }
+_:scope, _:future, _:not(*:root), select[size="7"]  { margin-bottom: calc(1.1rem - 2px); }
+_:scope, _:future, _:not(*:root), select[size="8"]  { margin-bottom: calc(0.6rem - 2px); }
+_:scope, _:future, _:not(*:root), select[size="9"]  { margin-bottom: calc(1.3rem - 2px); }
+_:scope, _:future, _:not(*:root), select[size="10"] { margin-bottom: calc(0.8rem - 2px); }
+*/
+_:-webkit-full-screen, _::-webkit-full-page-media, _:future, :root select[size="2"] {
+  margin-bottom: calc(2.4rem - 0.6em - 2px);
+}
+
+_:-webkit-full-screen, _::-webkit-full-page-media, _:future, :root select[size="3"] {
+  margin-bottom: calc(2.4rem - 0.6em - 2px);
+}
+
+_:-webkit-full-screen, _::-webkit-full-page-media, _:future, :root select[size="4"] {
+  margin-bottom: calc(2.4rem - 0.6em - 2px);
+}
+
+_:-webkit-full-screen, _::-webkit-full-page-media, _:future, :root select[size="5"] {
+  margin-bottom: calc(2.4rem - 1.1em - 2px);
+}
+
+_:-webkit-full-screen, _::-webkit-full-page-media, _:future, :root select[size="6"] {
+  margin-bottom: calc(2.4rem - 0.85em - 2px);
+}
+
+_:-webkit-full-screen, _::-webkit-full-page-media, _:future, :root select[size="7"] {
+  margin-bottom: calc(2.4rem - 0.6em - 2px);
+}
+
+_:-webkit-full-screen, _::-webkit-full-page-media, _:future, :root select[size="8"] {
+  margin-bottom: calc(2.4rem - 1.1em - 2px);
+}
+
+_:-webkit-full-screen, _::-webkit-full-page-media, _:future, :root select[size="9"] {
+  margin-bottom: calc(2.4rem - 0.85em - 2px);
+}
+
+_:-webkit-full-screen, _::-webkit-full-page-media, _:future, :root select[size="10"] {
+  margin-bottom: calc(2.4rem - 0.6em - 2px);
+}
+
+/*
+@media screen and (-webkit-min-device-pixel-ratio:0) and (min-resolution:.001dpcm) {
+    select[size] { margin-bottom: calc(0.9rem - 2px); }
+}
+*/
+/*
+    Similar problem with IE9-11:
+*/
+/* IE9-11 */
+@media screen and (min-width: 0\0) and (min-resolution: +72dpi) {
+  select[size="2"] {
+    margin-bottom: calc(2.4rem - 1.1em - 2px);
+  }
+  select[size="3"] {
+    margin-bottom: calc(2.4rem - 0.75em - 2px);
+  }
+  select[size="4"] {
+    margin-bottom: calc(2.4rem - 1.25em - 2px);
+  }
+  select[size="5"] {
+    margin-bottom: calc(2.4rem - 0.95em - 2px);
+  }
+  select[size="6"] {
+    margin-bottom: calc(2.4rem - 0.65em - 2px);
+  }
+  select[size="7"] {
+    margin-bottom: calc(2.4rem - 1.1em - 2px);
+  }
+  select[size="8"] {
+    margin-bottom: calc(2.4rem - 0.75em - 2px);
+  }
+  select[size="9"] {
+    margin-bottom: calc(2.4rem - 1.25em - 2px);
+  }
+  select[size="10"] {
+    margin-bottom: calc(2.4rem - 0.95em - 2px);
+  }
+}
+
+/*
+    These may be experimental, but they actually make Safari usable with a keyboard, so long as
+    you enable an "Accessibility" setting located in the advanced tab of Safari preferences.
+    ("Press TAB to highlight each item on a web page.)
+    That is - the default outline focus style works, but shadows don't unless appearance: none
+    is used.
+
+    1. Safari 9.1 doesn't recognize 'auto' but I suspect others won't recognize 'initial', so
+       keeping both for now.
+*/
+/*
+    Global sizes
+*/
+/*
+    Fab Four Widths
+
+    https://medium.freecodecamp.com/the-fab-four-technique-to-create-responsive-emails-without-media-queries-baf11fdfa848#.dtpllw1lf
+    https://www.sitepoint.com/responsive-css-patterns-without-media-queries/
+
+*/
+/*
+@import "component-patterns/_contact-list.scss";
+
+@import "component-patterns/_thumbnail.scss";
+
+$theme-only: true;
+@import "component-patterns/_panel.scss";
+
+@import "layout-patterns/_distribute.scss";
+
+@import "utility-patterns/_padding.scss";
+
+@import "utility-patterns/_space.scss";
+
+@import "utility-patterns/_text-align.scss";
+*/
+/*
+
+*/
+.c-contact-list.c-contact-list dt, .c-user-content [data-contains~="contact-details"] dt {
+  display: none;
+}
+
+.c-contact-list.c-contact-list dd, .c-user-content [data-contains~="contact-details"] dd {
+  margin-bottom: 0.6rem;
+  position: relative;
+}
+
+.c-contact-list .icon, .c-user-content [data-contains~="contact-details"] .icon {
+  margin-left: -1.75em;
+  margin-top: 0.1em;
+  position: absolute;
+}
+
+.c-contact-avatar.c-contact-avatar {
+  float: left;
+  margin: 0.5em;
+  width: 35%;
+  min-width: 8em;
+  max-width: 16em;
+  border-radius: 99999px;
+  overflow: hidden;
+}
+
+/*
+*/
+.c-thumbnail.c-thumbnail[href], .c-user-content [href][data-contains~="thumbnail"], .c-user-content [data-contains~="thumbnails"] a[href]:first-of-type {
+  display: inline-block;
+  border-width: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.c-thumbnail.c-thumbnail[href]:hover, .c-user-content [href]:hover[data-contains~="thumbnail"], .c-user-content [data-contains~="thumbnails"] a[href]:hover:first-of-type, .c-thumbnail.c-thumbnail[href]:active, .c-user-content [href]:active[data-contains~="thumbnail"], .c-user-content [data-contains~="thumbnails"] a[href]:active:first-of-type, .c-thumbnail.c-thumbnail[href]:focus, .c-user-content [href]:focus[data-contains~="thumbnail"], .c-user-content [data-contains~="thumbnails"] a[href]:focus:first-of-type {
+  box-shadow: 0 0 0 1.2rem rgba(255, 255, 255, 0.8), 0 0 0 1.8rem rgba(0, 0, 0, 0.2);
+  border-width: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.c-thumbnail img, .c-user-content [data-contains~="thumbnail"] img, .c-user-content [data-contains~="thumbnails"] a:first-of-type img {
+  margin: 0;
+  border: 1px solid #ccc;
+}
+
+/*@if $border-color == null {
+        $border-color: darken($background-color, 10%);
+    }*/
+.c-thumbnail, .c-user-content [data-contains~="thumbnail"], .c-user-content [data-contains~="thumbnails"] a:first-of-type {
+  color: #333;
+}
+
+/*
+    We need to load _distribute.scss because _user_content.scss required it, but we don't actually
+    want to apply the styles because it makes editing hard.
+*/
+/*
+    Distribute items inside a container.
+
+*/
+/*
+    IE11 needs this wrapper to behave properly.
+    If you're not supporting IE11, you don't this this CSS or the HTML that goes with it.
+*
+.l-distribute-wrap {
+    display: -ms-flexbox;
+    display: flex;
+
+    width: 100%;
+
+    & > .l-distribute {
+        -webkit-flex-basis: 100%;
+        -ms-flex-preferred-size: 100%;
+        flex-basis: 100%;
+    }
+}
+*/
+/*
+    1. This is a hack for IE11, otherwise the container goes as wide as the children in a row.
+*/
+.l-distribute.l-distribute, .c-user-content [data-display-as~="blocks"] > * {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: stretch;
+  --s: 0;
+  width: 0;
+  /* [1] */
+  min-width: 100%;
+  /* [1] */
+}
+
+.l-distribute > *, .c-user-content [data-display-as~="blocks"] > * > * {
+  flex: 0 1 auto;
+  margin: 0;
+  padding: 0;
+}
+
+.l-distribute.l-distribute--start, .c-user-content [data-display-as~="blocks"] > .l-distribute--start {
+  justify-content: flex-start;
+}
+
+.l-distribute.l-distribute--end, .c-user-content [data-display-as~="blocks"] > .l-distribute--end {
+  justify-content: flex-end;
+}
+
+.l-distribute.l-distribute--limit-10 > *, .c-user-content [data-display-as~="blocks"] > .l-distribute--limit-10 > * {
+  -webkit-flex-basis: 10em;
+  flex-basis: 7.5em;
+  max-width: 10em;
+}
+
+.l-distribute.l-distribute--limit-15 > *, .c-user-content [data-display-as~="blocks"] > .l-distribute--limit-15 > * {
+  -webkit-flex-basis: 15em;
+  flex-basis: 11.25em;
+  max-width: 15em;
+}
+
+.l-distribute.l-distribute--limit-20 > *, .c-user-content [data-display-as~="blocks"] > .l-distribute--limit-20 > * {
+  -webkit-flex-basis: 20em;
+  flex-basis: 15em;
+  max-width: 20em;
+}
+
+.l-distribute.l-distribute--limit-25 > *, .c-user-content [data-display-as~="blocks"] > .l-distribute--limit-25 > * {
+  -webkit-flex-basis: 25em;
+  flex-basis: 18.75em;
+  max-width: 25em;
+}
+
+.l-distribute.l-distribute--limit-30 > *, .c-user-content [data-display-as~="blocks"] > .l-distribute--limit-30 > * {
+  -webkit-flex-basis: 30em;
+  flex-basis: 22.5em;
+  max-width: 30em;
+}
+
+.l-distribute.l-distribute--limit-35 > *, .c-user-content [data-display-as~="blocks"] > .l-distribute--limit-35 > * {
+  -webkit-flex-basis: 35em;
+  flex-basis: 26.25em;
+  max-width: 35em;
+}
+
+.l-distribute.l-distribute--limit-40 > *, .c-user-content [data-display-as~="blocks"] > .l-distribute--limit-40 > * {
+  -webkit-flex-basis: 40em;
+  flex-basis: 30em;
+  max-width: 40em;
+}
+
+.l-distribute.l-distribute--gutter--s, .c-user-content [data-display-as~="blocks"] > .l-distribute--gutter--s,
+.l-distribute.l-distribute--gutter--s > *,
+.c-user-content [data-display-as~="blocks"] > .l-distribute--gutter--s > * {
+  padding: 0.5rem;
+  --s: 1rem;
+}
+
+.l-distribute.l-distribute--gutter, .c-user-content [data-display-as~="blocks"] > .l-distribute--gutter,
+.l-distribute.l-distribute--gutter > *,
+.c-user-content [data-display-as~="blocks"] > .l-distribute--gutter > *, .l-distribute.l-distribute--gutter--m, .c-user-content [data-display-as~="blocks"] > .l-distribute--gutter--m,
+.l-distribute.l-distribute--gutter--m > *,
+.c-user-content [data-display-as~="blocks"] > .l-distribute--gutter--m > * {
+  padding: 1rem;
+  --s: 2rem;
+}
+
+.l-distribute.l-distribute--gutter--l, .c-user-content [data-display-as~="blocks"] > .l-distribute--gutter--l,
+.l-distribute.l-distribute--gutter--l > *,
+.c-user-content [data-display-as~="blocks"] > .l-distribute--gutter--l > * {
+  padding: 2rem;
+  --s: 4rem;
+}
+
+/*
+            1. This is a hack for IE11, otherwise the container goes as wide as the children in a
+               row.
+            2. Note we ONLY want this on the outermost container, so we need to turn off this hack
+               for the main distribute container.
+        */
+.l-distribute--flush-edge-gutters {
+  overflow: hidden;
+  flex-basis: 100%;
+  width: 0;
+  /* [1] */
+  min-width: 100%;
+  /* [1] */
+}
+
+.l-distribute--flush-edge-gutters > .l-distribute, .c-user-content .l-distribute--flush-edge-gutters[data-display-as~="blocks"] > * {
+  width: auto;
+  /* [2] */
+  min-width: none;
+  /* [2] */
+}
+
+.l-distribute--flush-edge-gutters .l-distribute.l-distribute--gutter--s, .l-distribute--flush-edge-gutters .c-user-content [data-display-as~="blocks"] > .l-distribute--gutter--s, .c-user-content .l-distribute--flush-edge-gutters [data-display-as~="blocks"] > .l-distribute--gutter--s {
+  margin: -1rem;
+}
+
+.l-distribute--flush-edge-gutters .l-distribute.l-distribute--gutter, .l-distribute--flush-edge-gutters .c-user-content [data-display-as~="blocks"] > .l-distribute--gutter, .c-user-content .l-distribute--flush-edge-gutters [data-display-as~="blocks"] > .l-distribute--gutter,
+.l-distribute--flush-edge-gutters .l-distribute.l-distribute--gutter--m,
+.l-distribute--flush-edge-gutters .c-user-content [data-display-as~="blocks"] > .l-distribute--gutter--m,
+.c-user-content .l-distribute--flush-edge-gutters [data-display-as~="blocks"] > .l-distribute--gutter--m {
+  margin: -2rem;
+}
+
+.l-distribute--flush-edge-gutters .l-distribute.l-distribute--gutter--l, .l-distribute--flush-edge-gutters .c-user-content [data-display-as~="blocks"] > .l-distribute--gutter--l, .c-user-content .l-distribute--flush-edge-gutters [data-display-as~="blocks"] > .l-distribute--gutter--l {
+  margin: -4rem;
+}
+
+.l-distribute.l-distribute--balance-bottom > *, .c-user-content [data-display-as~="blocks"] > .l-distribute--balance-bottom > * {
+  flex-grow: 1;
+}
+
+.l-distribute.l-distribute--basis-15 > *, .c-user-content [data-display-as~="blocks"] > .l-distribute--basis-15 > * {
+  flex-basis: 15rem;
+  --b: 15rem;
+}
+
+.l-distribute.l-distribute--basis-20 > *, .c-user-content [data-display-as~="blocks"] > .l-distribute--basis-20 > * {
+  flex-basis: 20rem;
+  --b: 20rem;
+}
+
+.l-distribute.l-distribute--basis-25 > *, .c-user-content [data-display-as~="blocks"] > .l-distribute--basis-25 > * {
+  flex-basis: 25rem;
+  --b: 25rem;
+}
+
+.l-distribute.l-distribute--basis-30 > *, .c-user-content [data-display-as~="blocks"] > .l-distribute--basis-30 > * {
+  flex-basis: 30rem;
+  --b: 30rem;
+}
+
+.l-distribute.l-distribute--basis-35 > *, .c-user-content [data-display-as~="blocks"] > .l-distribute--basis-35 > * {
+  flex-basis: 35rem;
+  --b: 35rem;
+}
+
+@supports (width: max(1px, 1px)) {
+  .l-distribute, .c-user-content [data-display-as~="blocks"] > * {
+    /* 1 or more: */
+    /* 2 or more: */
+    /* 3 or more: - note this should be part of col-to-row*/
+    /*&.l-distribute--balance-top > :nth-last-child(n+3),
+        &.l-distribute--balance-top > :nth-last-child(n+3) ~ * {
+            //flex-basis: unquote("max(33%, (var(--bp1) - 100%) * 999)");
+            flex-basis: unquote("max(33%, ((var(--b) * 3) - 100%) * 999)");
+        }*/
+    /* 3 or more: */
+    /* 3 or more, different values for the first one: */
+    /* 4 or more: */
+    /*
+        From here on in there are increasingly more possibilities on how things can be laid out.
+        More items = more possibilities. I've tried to go for what I consider to be the most balanced option but almost all other possibilities are achievable.
+        */
+    /* 5 or more: */
+    /* 5 or more, different values for the first two: */
+    /* 5 or more, different values for the first one: */
+    /* 6 or more: */
+    /* 6 or more, different values for the first two: */
+    /*&.l-distribute--balance-top > :nth-last-child(n+6),
+        &.l-distribute--balance-top > :nth-last-child(n+6) + * {
+            flex-basis: unquote("min(max(50%, ((var(--b) * 2) - 100%) * 999), max(33%, ((var(--b) * 3) - 100%) * 999), max(50%, ((var(--b) * 4) - 100%) * 999), max(20%, ((var(--b) * 5) - 100%) * 999), max(16%, ((var(--b) * 6) - 100%) * 999))");
+        }*/
+    /* 6 or more, different values for the first one: */
+    /*&.l-distribute--balance-top > :nth-last-child(n+6) {
+            flex-basis: unquote("min(max(50%, ((var(--b) * 2) - 100%) * 999), max(33%, ((var(--b) * 3) - 100%) * 999), max(50%, ((var(--b) * 4) - 100%) * 999), max(100%, ((var(--b) * 5) - 100%) * 999), max(16%, ((var(--b) * 6) - 100%) * 999))");
+        }*/
+    /*
+            It's worth noting here that things get especially tricky and messy. We've already seen
+            with 6 we've had to skip some steps, and things like 7 and 11 are quite hard too.
+            Also with ANY amount, the practicalities of allowing all arrangements up to a single
+            row become limiting.
+            If you assume you have items that are quite small - and can therefore fit into a single
+            row - a small reduction in available width that causes wrapping would leave a very large
+            item on it's own row. This is the whole reason we want to balance things in the first
+            place, so that this doesn't happen - we want a reduction in available width that causes
+            wrapping to lead to MORE items being wrapped and thus creating a better balance.
+            It's just very hard to know where things SHOULD land.
+
+        */
+    /* 7 or more: (1x7 | 1,2x3 | 1,3x2 | 3,4) */
+    /* 7 or more, different values for the second and third: */
+    /* 7 or more, different values for the first one: */
+    /* 8 or more: */
+    /* 9 or more: */
+    /* 9 or more, different values for the first one: */
+    /* 10 or more: */
+    /* 11 or more: */
+    /* 11 or more, different values for the second one: */
+    /* 11 or more, different values for the first one: */
+    /* 11 or more, different values for the next 3 ...: */
+    /*&.l-distribute--balance-top > :nth-last-child(n+11) ~ :nth-child(5),
+        &.l-distribute--balance-top > :nth-last-child(n+11) ~ :nth-child(5) ~ * {
+            flex-basis: unquote("max(33%, (var(--bp2) - 100%) * 999)");
+        }
+*/
+    /* 11 or more, different values for the last 4 ...: */
+    /*&.l-distribute--balance-top > :nth-last-child(n+11) ~ :nth-child(7),
+        &.l-distribute--balance-top > :nth-last-child(n+11) ~ :nth-child(7) ~ * {
+            flex-basis: unquote("max(25%, (var(--bp2) - 100%) * 999)");
+        }*/
+    /* 12 or more: double class to boost specificity - ugh.*/
+  }
+  .l-distribute.l-distribute--balance-top, .c-user-content [data-display-as~="blocks"] > .l-distribute--balance-top {
+    --bp1: 90rem;
+    --bp1-2: 110rem;
+    --bp2: 130em;
+  }
+  .l-distribute.l-distribute--balance-top > *, .c-user-content [data-display-as~="blocks"] > .l-distribute--balance-top > * {
+    flex-basis: 100%;
+    flex-grow: 1;
+  }
+  .l-distribute.l-distribute--balance-top > :nth-last-child(n+2), .c-user-content [data-display-as~="blocks"] > .l-distribute--balance-top > :nth-last-child(n+2),
+  .l-distribute.l-distribute--balance-top > :nth-last-child(n+2) ~ *,
+  .c-user-content [data-display-as~="blocks"] > .l-distribute--balance-top > :nth-last-child(n+2) ~ * {
+    flex-basis: max(50%, ((var(--b) * 2) - 100%) * 999);
+  }
+  .l-distribute.l-distribute--balance-top > :nth-last-child(n+3), .c-user-content [data-display-as~="blocks"] > .l-distribute--balance-top > :nth-last-child(n+3),
+  .l-distribute.l-distribute--balance-top > :nth-last-child(n+3) ~ *,
+  .c-user-content [data-display-as~="blocks"] > .l-distribute--balance-top > :nth-last-child(n+3) ~ * {
+    flex-basis: min(max(50%, ((var(--b) * 2) - 100%) * 999), max(33%, ((var(--b) * 3) - 100%) * 999));
+  }
+  .l-distribute.l-distribute--balance-top > :nth-last-child(n+3), .c-user-content [data-display-as~="blocks"] > .l-distribute--balance-top > :nth-last-child(n+3) {
+    flex-basis: max(33%, ((var(--b) * 3) - 100%) * 999);
+  }
+  .l-distribute.l-distribute--balance-top > :nth-last-child(n+4), .c-user-content [data-display-as~="blocks"] > .l-distribute--balance-top > :nth-last-child(n+4),
+  .l-distribute.l-distribute--balance-top > :nth-last-child(n+4) ~ *,
+  .c-user-content [data-display-as~="blocks"] > .l-distribute--balance-top > :nth-last-child(n+4) ~ * {
+    flex-basis: min(max(50%, ((var(--b) * 2) - 100%) * 999), max(25%, ((var(--b) * 4) - 100%) * 999));
+  }
+  .l-distribute.l-distribute--balance-top > :nth-last-child(n+5), .c-user-content [data-display-as~="blocks"] > .l-distribute--balance-top > :nth-last-child(n+5),
+  .l-distribute.l-distribute--balance-top > :nth-last-child(n+5) ~ *,
+  .c-user-content [data-display-as~="blocks"] > .l-distribute--balance-top > :nth-last-child(n+5) ~ * {
+    flex-basis: min(max(50%, ((var(--b) * 2) - 100%) * 999), max(33%, ((var(--b) * 3) - 100%) * 999), max(25%, ((var(--b) * 4) - 100%) * 999), max(20%, ((var(--b) * 5) - 100%) * 999));
+  }
+  .l-distribute.l-distribute--balance-top > :nth-last-child(n+5), .c-user-content [data-display-as~="blocks"] > .l-distribute--balance-top > :nth-last-child(n+5),
+  .l-distribute.l-distribute--balance-top > :nth-last-child(n+5) + *,
+  .c-user-content [data-display-as~="blocks"] > .l-distribute--balance-top > :nth-last-child(n+5) + * {
+    flex-basis: min(max(50%, ((var(--b) * 2) - 100%) * 999), max(20%, ((var(--b) * 5) - 100%) * 999));
+  }
+  .l-distribute.l-distribute--balance-top > :nth-last-child(n+5), .c-user-content [data-display-as~="blocks"] > .l-distribute--balance-top > :nth-last-child(n+5) {
+    flex-basis: min(max(50%, ((var(--b) * 3) - 100%) * 999), max(100%, ((var(--b) * 4) - 100%) * 999), max(20%, ((var(--b) * 5) - 100%) * 999));
+  }
+  .l-distribute.l-distribute--balance-top > :nth-last-child(n+6), .c-user-content [data-display-as~="blocks"] > .l-distribute--balance-top > :nth-last-child(n+6),
+  .l-distribute.l-distribute--balance-top > :nth-last-child(n+6) ~ *,
+  .c-user-content [data-display-as~="blocks"] > .l-distribute--balance-top > :nth-last-child(n+6) ~ * {
+    flex-basis: min(max(50%, ((var(--b) * 2) - 100%) * 999), max(33%, ((var(--b) * 3) - 100%) * 999), max(16%, ((var(--b) * 6) - 100%) * 999));
+  }
+  .l-distribute.l-distribute--balance-top > :nth-last-child(n+7), .c-user-content [data-display-as~="blocks"] > .l-distribute--balance-top > :nth-last-child(n+7),
+  .l-distribute.l-distribute--balance-top > :nth-last-child(n+7) ~ *,
+  .c-user-content [data-display-as~="blocks"] > .l-distribute--balance-top > :nth-last-child(n+7) ~ * {
+    flex-basis: min(max(50%, ((var(--b) * 2) - 100%) * 999), max(33%, ((var(--b) * 3) - 100%) * 999), max(25%, ((var(--b) * 4) - 100%) * 999), max(14%, ((var(--b) * 7) - 100%) * 999));
+  }
+  .l-distribute.l-distribute--balance-top > :nth-last-child(n+7) + *, .c-user-content [data-display-as~="blocks"] > .l-distribute--balance-top > :nth-last-child(n+7) + *,
+  .l-distribute.l-distribute--balance-top > :nth-last-child(n+7) + * + *,
+  .c-user-content [data-display-as~="blocks"] > .l-distribute--balance-top > :nth-last-child(n+7) + * + * {
+    flex-basis: min(max(50%, ((var(--b) * 2) - 100%) * 999), max(33%, ((var(--b) * 3) - 100%) * 999), max(14%, ((var(--b) * 7) - 100%) * 999));
+  }
+  .l-distribute.l-distribute--balance-top > :nth-last-child(n+7), .c-user-content [data-display-as~="blocks"] > .l-distribute--balance-top > :nth-last-child(n+7) {
+    flex-basis: min(max(33%, ((var(--b) * 4) - 100%) * 999), max(14%, ((var(--b) * 7) - 100%) * 999));
+  }
+  .l-distribute.l-distribute--balance-top > :nth-last-child(n+8), .c-user-content [data-display-as~="blocks"] > .l-distribute--balance-top > :nth-last-child(n+8),
+  .l-distribute.l-distribute--balance-top > :nth-last-child(n+8) ~ *,
+  .c-user-content [data-display-as~="blocks"] > .l-distribute--balance-top > :nth-last-child(n+8) ~ * {
+    flex-basis: min(max(50%, ((var(--b) * 2) - 100%) * 999), max(25%, ((var(--b) * 4) - 100%) * 999), max(12%, ((var(--b) * 8) - 100%) * 999));
+  }
+  .l-distribute.l-distribute--balance-top > :nth-last-child(n+9), .c-user-content [data-display-as~="blocks"] > .l-distribute--balance-top > :nth-last-child(n+9),
+  .l-distribute.l-distribute--balance-top > :nth-last-child(n+9) ~ *,
+  .c-user-content [data-display-as~="blocks"] > .l-distribute--balance-top > :nth-last-child(n+9) ~ * {
+    flex-basis: min(max(50%, ((var(--b) * 2) - 100%) * 999), max(33%, ((var(--b) * 3) - 100%) * 999), max(11%, ((var(--b) * 9) - 100%) * 999));
+  }
+  .l-distribute.l-distribute--balance-top > :nth-last-child(n+9), .c-user-content [data-display-as~="blocks"] > .l-distribute--balance-top > :nth-last-child(n+9) {
+    flex-basis: min(max(33%, ((var(--b) * 3) - 100%) * 999), max(11%, ((var(--b) * 9) - 100%) * 999));
+  }
+  .l-distribute.l-distribute--balance-top > :nth-last-child(n+10), .c-user-content [data-display-as~="blocks"] > .l-distribute--balance-top > :nth-last-child(n+10),
+  .l-distribute.l-distribute--balance-top > :nth-last-child(n+10) ~ *,
+  .c-user-content [data-display-as~="blocks"] > .l-distribute--balance-top > :nth-last-child(n+10) ~ * {
+    flex-basis: min(max(50%, ((var(--b) * 2)- 100%) * 999), max(20%, ((var(--b) * 5) - 100%) * 999), max(10%, ((var(--b) * 10) - 100%) * 999));
+  }
+  .l-distribute.l-distribute--balance-top > :nth-last-child(n+11), .c-user-content [data-display-as~="blocks"] > .l-distribute--balance-top > :nth-last-child(n+11),
+  .l-distribute.l-distribute--balance-top > :nth-last-child(n+11) ~ *,
+  .c-user-content [data-display-as~="blocks"] > .l-distribute--balance-top > :nth-last-child(n+11) ~ * {
+    flex-basis: min(max(50%, ((var(--b) * 2) - 100%) * 999), max(33%, ((var(--b) * 3) - 100%) * 999), max(9%, ((var(--b) * 11) - 100%) * 999));
+  }
+  .l-distribute.l-distribute--balance-top > :nth-last-child(n+11) + *, .c-user-content [data-display-as~="blocks"] > .l-distribute--balance-top > :nth-last-child(n+11) + * {
+    flex-basis: min(max(50%, ((var(--b) * 2) - 100%) * 999), max(9%, ((var(--b) * 11) - 100%) * 999));
+  }
+  .l-distribute.l-distribute--balance-top > :nth-last-child(n+11), .c-user-content [data-display-as~="blocks"] > .l-distribute--balance-top > :nth-last-child(n+11) {
+    flex-basis: min(max(50%, ((var(--b) * 3) - 100%) * 999), max(9%, ((var(--b) * 11) - 100%) * 999));
+  }
+  .l-distribute.l-distribute.l-distribute--balance-top > :nth-last-child(n+12), .c-user-content [data-display-as~="blocks"] > .l-distribute--balance-top > :nth-last-child(n+12),
+  .l-distribute.l-distribute.l-distribute--balance-top > :nth-last-child(n+12) ~ *,
+  .c-user-content [data-display-as~="blocks"] > .l-distribute--balance-top > :nth-last-child(n+12) ~ * {
+    flex-basis: min(max(50%, ((var(--b) * 2) - 100%) * 999), max(33%, ((var(--b) * 3) - 100%) * 999), max(25%, ((var(--b) * 4) - 100%) * 999), max(16%, ((var(--b) * 6) - 100%) * 999), max(8%, ((var(--b) * 12) - 100%) * 999));
+  }
+}
+
+.c-user-content [data-display-as~="blocks"] > * {
+  display: block !important;
+}
+
+.c-user-content [data-display-as~="blocks"] > * > * {
+  max-width: none !important;
+}
+
+.c-user-content [data-display-as~="blocks"] > * > * > span {
+  display: inline-block !important;
+  border-width: 1px !important;
+  border-style: solid !important;
+  border-color: #ddd !important;
+  padding: 1em !important;
+}
+
+/*
+    Box padding.
+
+    @To Do: allow for responsive variations.
+*/
+.u-padding--left--xs,
+.u-padding--sides--xs {
+  padding-left: 0.6rem !important;
+}
+
+.u-padding--right--xs,
+.u-padding--sides--xs {
+  padding-right: 0.6rem !important;
+}
+
+.u-padding--top--xs {
+  padding-top: 0.6rem !important;
+}
+
+.u-padding--bottom--xs {
+  padding-bottom: 0.6rem !important;
+}
+
+.u-padding--xs {
+  padding: 0.6rem !important;
+}
+
+.u-padding--left--s,
+.u-padding--sides--s,
+.c-user-content [data-display-as~="blocks"] > * > * {
+  padding-left: 1.2rem !important;
+}
+
+.u-padding--right--s,
+.u-padding--sides--s,
+.c-user-content [data-display-as~="blocks"] > * > * {
+  padding-right: 1.2rem !important;
+}
+
+.u-padding--top--s {
+  padding-top: 1.2rem !important;
+}
+
+.u-padding--bottom--s {
+  padding-bottom: 1.2rem !important;
+}
+
+.u-padding--s {
+  padding: 1.2rem !important;
+}
+
+.u-padding--left,
+.u-padding--sides {
+  padding-left: 2.4rem !important;
+}
+
+.u-padding--right,
+.u-padding--sides {
+  padding-right: 2.4rem !important;
+}
+
+.u-padding--top {
+  padding-top: 2.4rem !important;
+}
+
+.u-padding--bottom {
+  padding-bottom: 2.4rem !important;
+}
+
+.u-padding--left--l,
+.u-padding--sides--l {
+  padding-left: 2.4rem !important;
+}
+
+.u-padding--right--l,
+.u-padding--sides--l {
+  padding-right: 2.4rem !important;
+}
+
+.u-padding--top--l {
+  padding-top: 2.4rem !important;
+}
+
+.u-padding--bottom--l {
+  padding-bottom: 2.4rem !important;
+}
+
+.u-padding--l {
+  padding: 2.4rem !important;
+}
+
+.u-padding--left--xl,
+.u-padding--sides--xl {
+  padding-left: 2.4rem !important;
+}
+
+.u-padding--right--xl,
+.u-padding--sides--xl {
+  padding-right: 2.4rem !important;
+}
+
+.u-padding--top--xl {
+  padding-top: 2.4rem !important;
+}
+
+.u-padding--bottom--xl {
+  padding-bottom: 2.4rem !important;
+}
+
+.u-padding--xl {
+  padding: 2.4rem !important;
+}
+
+@media only screen and (min-width: 28em) {
+  .u-padding--left--l,
+  .u-padding--sides--l {
+    padding-left: 4.8rem !important;
+  }
+  .u-padding--right--l,
+  .u-padding--sides--l {
+    padding-right: 4.8rem !important;
+  }
+  .u-padding--top--l {
+    padding-top: 4.8rem !important;
+  }
+  .u-padding--bottom--l {
+    padding-bottom: 4.8rem !important;
+  }
+  .u-padding--l {
+    padding: 4.8rem !important;
+  }
+  .u-padding--left--xl,
+  .u-padding--sides--xl {
+    padding-left: 9.6rem !important;
+  }
+  .u-padding--right--xl,
+  .u-padding--sides--xl {
+    padding-right: 9.6rem !important;
+  }
+  .u-padding--top--xl {
+    padding-top: 9.6rem !important;
+  }
+  .u-padding--bottom--xl {
+    padding-bottom: 9.6rem !important;
+  }
+  .u-padding--xl {
+    padding: 9.6rem !important;
+  }
+}
+
+.u-padding {
+  padding: 2.4rem !important;
+}
+
+.u-padding--top--none {
+  padding-top: 0 !important;
+}
+
+.u-padding--bottom--none {
+  padding-bottom: 0 !important;
+}
+
+.u-padding--left--none {
+  padding-left: 0 !important;
+}
+
+.u-padding--right--none {
+  padding-right: 0 !important;
+}
+
+.u-padding--none {
+  padding: 0 !important;
+}
+
+/*
+    Box spacing
+
+    @To Do: allow for responsive variations.
+*/
+.u-space--left--auto {
+  margin-left: auto !important;
+}
+
+.u-space--right--auto {
+  margin-right: auto !important;
+}
+
+.u-space--right--xs {
+  margin-right: 0.6rem !important;
+}
+
+.u-space--above--xs {
+  margin-top: 0.6rem !important;
+}
+
+.u-space--below--xs {
+  margin-bottom: 0.6rem !important;
+}
+
+.u-space--left--xs {
+  margin-left: 0.6rem !important;
+}
+
+.u-space--right--xs {
+  margin-right: 0.6rem !important;
+}
+
+.u-space--above--xs {
+  margin-top: 0.6rem !important;
+}
+
+.u-space--below--xs {
+  margin-bottom: 0.6rem !important;
+}
+
+.u-space--xs {
+  margin: 0.6rem !important;
+}
+
+.u-space--right--s {
+  margin-right: 1.2rem !important;
+}
+
+.u-space--above--s {
+  margin-top: 1.2rem !important;
+}
+
+.u-space--below--s {
+  margin-bottom: 1.2rem !important;
+}
+
+.u-space--left--s {
+  margin-left: 1.2rem !important;
+}
+
+.u-space--right--s {
+  margin-right: 1.2rem !important;
+}
+
+.u-space--above--s {
+  margin-top: 1.2rem !important;
+}
+
+.u-space--below--s {
+  margin-bottom: 1.2rem !important;
+}
+
+.u-space--s {
+  margin: 1.2rem !important;
+}
+
+.u-space--left {
+  margin-left: 2.4rem !important;
+}
+
+.u-space--right {
+  margin-right: 2.4rem !important;
+}
+
+.u-space--above {
+  margin-top: 2.4rem !important;
+}
+
+.u-space--below, .c-user-content [data-display-as~="blocks"] > * > *, .c-user-content [data-contains~="thumbnails"] a:first-of-type {
+  margin-bottom: 2.4rem !important;
+}
+
+.u-space {
+  margin: 2.4rem !important;
+}
+
+.u-space--above--none {
+  margin-top: 0 !important;
+}
+
+.u-space--below--none {
+  margin-bottom: 0 !important;
+}
+
+.u-space--left--none {
+  margin-left: 0 !important;
+}
+
+.u-space--right--none {
+  margin-right: 0 !important;
+}
+
+.u-space--none {
+  margin: 0 !important;
+}
+
+.u-space--left--l {
+  margin-left: 4.8rem !important;
+}
+
+.u-space--right--l {
+  margin-right: 4.8rem !important;
+}
+
+.u-space--above--l {
+  margin-top: 4.8rem !important;
+}
+
+.u-space--below--l {
+  margin-bottom: 4.8rem !important;
+}
+
+.u-space--l {
+  margin: 4.8rem !important;
+}
+
+.u-space--left--xl {
+  margin-left: 9.6rem !important;
+}
+
+.u-space--right--xl {
+  margin-right: 9.6rem !important;
+}
+
+.u-space--above--xl {
+  margin-top: 9.6rem !important;
+}
+
+.u-space--below--xl {
+  margin-bottom: 9.6rem !important;
+}
+
+.u-space--xl {
+  margin: 9.6rem !important;
+}
+
+.u-space--left--auto {
+  margin-left: auto !important;
+}
+
+.u-space--right--auto {
+  margin-right: auto !important;
+}
+
+.u-space--above--auto {
+  margin-top: auto !important;
+}
+
+.u-space--below--auto {
+  margin-bottom: auto !important;
+}
+
+.u-last-child--space--below--none > :last-child {
+  margin-bottom: 0 !important;
+}
+
+/*
+    Text alignment.
+
+    @To Do: allow for responsive variations.
+*/
+.u-text-align--left {
+  text-align: left !important;
+  justify-content: flex-start;
+}
+
+.u-text-align--center, .c-user-content [data-display-as~="blocks"] > * > * {
+  text-align: center !important;
+  justify-content: center;
+}
+
+.u-text-align--right {
+  text-align: right !important;
+  justify-content: flex-end;
+}
+
+/*
+    Groups.
+
+    Attempts to improve where text wraps.
+
+*/
+.u-word-wrap, h1, h2, h3, h4,
+.u-word-wrap--inside * {
+  /* These are technically the same, but use both */
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  /* This is the dangerous one in WebKit, as it breaks things wherever */
+  /* Instead use this non-standard one: */
+  word-break: break-word;
+  /* Adds a hyphen where the word breaks, if supported (No Blink) */
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+/*
+    NOTE: data-width and data-position are currently unused.
+    I'm considering their use. An (abandoned) attempt at customising the CKEditor div plugin
+    would have required these.
+*/
+.c-user-content {
+  /*[data-display-as~="blocks"] {
+            @extend .l-distribute-wrap;
+        }*/
+  /*
+            Note this original method just assumed that images are square.
+            MaatHRI team page proves this is not the case, so the above, explicit portrait
+            declaration is needed.
+            It's still ok to assume square images in templates, though, where I know I'm just using
+            the avatars folder (where square is forced on upload).
+            So, it's really just user content that's the problem, so keep things as they are for
+            now.
+        */
+}
+
+.c-user-content [data-display-is~="width-one-quarter"] + [data-contains~="contact-details"],
+.c-user-content [data-width="one-quarter"] + [data-contains~="contact-details"] {
+  max-width: 100%;
+  width: calc((35em - 100%) * 1000);
+  min-width: calc(75% - 2.4rem);
+}
+
+.c-user-content [data-display-is~="width-one-third"] + [data-contains~="contact-details"],
+.c-user-content [data-width="one-third"] + [data-contains~="contact-details"] {
+  max-width: 100%;
+  width: calc((35em - 100%) * 1000);
+  min-width: calc(67% - 2.4rem);
+}
+
+.c-user-content [data-display-is~="width-one-half"] + [data-contains~="contact-details"],
+.c-user-content [data-width="one-half"] + [data-contains~="contact-details"] {
+  max-width: 100%;
+  width: calc((35em - 100%) * 1000);
+  min-width: calc(50% - 2.4rem);
+}
+
+.c-user-content [data-display-is~="width-two-thirds"] + [data-contains~="contact-details"],
+.c-user-content [data-width="two-thirds"] + [data-contains~="contact-details"] {
+  max-width: 100%;
+  width: calc((35em - 100%) * 1000);
+  min-width: calc(33% - 2.4rem);
+}
+
+.c-user-content [data-display-is*="width-"] + [data-contains~="contact-details"] + *,
+.c-user-content [data-width] + [data-contains~="contact-details"] + * {
+  clear: both;
+}
+
+.c-user-content [data-display-as~="box"],
+.c-user-content [data-display-as~="pale-box"],
+.c-user-content [data-display-as~="themed-box--background"],
+.c-user-content [data-display-as~="themed-box--border"],
+.c-user-content [data-display-as~="notice-box"] {
+  padding: 2.4rem;
+  margin-bottom: 2.4rem;
+  padding-bottom: 0 !important;
+  width: 100%;
+}
+
+.c-user-content [data-display-as~="box"]::after,
+.c-user-content [data-display-as~="pale-box"]::after,
+.c-user-content [data-display-as~="themed-box--background"]::after,
+.c-user-content [data-display-as~="themed-box--border"]::after,
+.c-user-content [data-display-as~="notice-box"]::after {
+  content: "";
+  display: block;
+  height: 1px;
+  margin-top: calc(2.4rem - 1px);
+  clear: both;
+}
+
+.c-user-content [data-display-as~="box"]::before,
+.c-user-content [data-display-as~="pale-box"]::before,
+.c-user-content [data-display-as~="themed-box--background"]::before,
+.c-user-content [data-display-as~="themed-box--border"]::before,
+.c-user-content [data-display-as~="notice-box"]::before {
+  content: " ";
+  display: table;
+}
+
+.c-user-content [data-display-as~="box"], .c-user-content [data-display-as~="box"]::after,
+.c-user-content [data-display-as~="pale-box"],
+.c-user-content [data-display-as~="pale-box"]::after,
+.c-user-content [data-display-as~="themed-box--background"],
+.c-user-content [data-display-as~="themed-box--background"]::after,
+.c-user-content [data-display-as~="themed-box--border"],
+.c-user-content [data-display-as~="themed-box--border"]::after,
+.c-user-content [data-display-as~="notice-box"],
+.c-user-content [data-display-as~="notice-box"]::after {
+  clear: both;
+}
+
+.c-user-content [data-display-as~="box"] {
+  border: 1px solid #8e8279;
+}
+
+.c-user-content [data-display-as~="pale-box"] {
+  background-color: #f7f6f6;
+}
+
+.c-user-content [data-display-as~="themed-box--background"] {
+  background: currentColor;
+}
+
+.c-user-content [data-display-as~="themed-box--background"] a[href] {
+  color: #fff;
+}
+
+.c-user-content [data-display-as~="themed-box--background"] a[href]:hover,
+.c-user-content [data-display-as~="themed-box--background"] a[href]:active,
+.c-user-content [data-display-as~="themed-box--background"] a[href]:focus {
+  color: #fff;
+}
+
+.c-user-content [data-display-as~="themed-box--background"] a[href].c-cta {
+  border-color: #fff;
+  color: #fff;
+  background-color: transparent;
+}
+
+.c-user-content [data-display-as~="themed-box--background"] a[href].c-cta:hover,
+.c-user-content [data-display-as~="themed-box--background"] a[href].c-cta:active,
+.c-user-content [data-display-as~="themed-box--background"] a[href].c-cta:focus {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.c-user-content [data-display-as~="themed-box--border"] {
+  border-color: currentColor;
+  border-style: solid;
+  border-width: 3px;
+}
+
+.c-user-content [data-display-as~="notice-box"] {
+  border: 6px solid #8e8279;
+  background: #f7f6f6;
+}
+
+.c-user-content [data-display-as~="notice-box"] a[href].c-cta:hover,
+.c-user-content [data-display-as~="notice-box"] a[href].c-cta:active,
+.c-user-content [data-display-as~="notice-box"] a[href].c-cta:focus {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.c-user-content [data-display-as~="blocks"] > * > * {
+  flex-basis: 11.25em;
+  max-width: 15em;
+  align-self: stretch;
+}
+
+.c-user-content [data-display-as~="blocks"] > * > * > span {
+  display: flex;
+  flex-direction: column;
+}
+
+.c-user-content [data-display-as~="blocks"] > * > * > span > a {
+  flex: 0 0 auto;
+}
+
+.c-user-content [data-display-as~="blocks"] > * > * > span > a:first-child {
+  flex: 1 0 auto;
+}
+
+.c-user-content [data-display-is~="pulled-left"],
+.c-user-content [data-display-is~="pulled-right"],
+.c-user-content [data-display-is~="pulled-center"],
+.c-user-content [data-position] {
+  margin-bottom: 1.2rem;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  /*&::before,
+            &::after {
+                content: "";
+                display: block;
+                -webkit-flex: 0 0 auto;
+                    -ms-flex: 0 0 auto;
+                        flex: 0 0 auto;
+                //@include ff-width($sz-m, $uc-breakpoint, 100%);
+            }
+
+            // Because these pseudo elements are children, we need to calculate parent's parent:
+
+            &[data-display-is~="width-one-half"]::before,
+            &[data-display-is~="width-one-half"]::after {
+                @include ff-width($sz-m, ($uc-breakpoint / 2), 0);
+            }*/
+}
+
+.c-user-content [data-display-is~="pulled-left"],
+.c-user-content [data-position="left"] {
+  float: left;
+  clear: left;
+  margin-right: 2.4rem;
+}
+
+.c-user-content [data-display-is~="pulled-left"]::before,
+.c-user-content [data-position="left"]::before {
+  display: none;
+}
+
+.c-user-content [data-display-is~="pulled-left"] + ::before,
+.c-user-content [data-display-is~="pulled-left"] + ::after,
+.c-user-content [data-position="left"] + ::before,
+.c-user-content [data-position="left"] + ::after {
+  content: " ";
+  display: table;
+}
+
+.c-user-content [data-display-is~="pulled-left"] + ::after,
+.c-user-content [data-position="left"] + ::after {
+  clear: both;
+}
+
+.c-user-content [data-display-is~="pulled-right"],
+.c-user-content [data-position="right"] {
+  float: right;
+  clear: right;
+  margin-left: 2.4rem;
+}
+
+.c-user-content [data-display-is~="pulled-right"]::after,
+.c-user-content [data-position="right"]::after {
+  display: none;
+}
+
+.c-user-content [data-display-is~="pulled-right"] + ::before,
+.c-user-content [data-display-is~="pulled-right"] + ::after,
+.c-user-content [data-position="right"] + ::before,
+.c-user-content [data-position="right"] + ::after {
+  content: " ";
+  display: table;
+}
+
+.c-user-content [data-display-is~="pulled-right"] + ::after,
+.c-user-content [data-position="right"] + ::after {
+  clear: both;
+}
+
+.c-user-content [data-display-is~="pulled-center"],
+.c-user-content [data-position="center"] {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.c-user-content [data-display-is~="pulled-center"]::after,
+.c-user-content [data-position="center"]::after {
+  display: none;
+}
+
+.c-user-content [data-display-is~="width-one-quarter"],
+.c-user-content [data-width="one-quarter"] {
+  max-width: 100%;
+  width: calc((35em - 100%) * 1000);
+  min-width: 25%;
+}
+
+.c-user-content [data-display-is~="width-one-third"],
+.c-user-content [data-width="one-third"] {
+  max-width: 100%;
+  width: calc((35em - 100%) * 1000);
+  min-width: 33%;
+}
+
+.c-user-content [data-display-is~="width-one-half"],
+.c-user-content [data-width="one-half"] {
+  max-width: 100%;
+  width: calc((35em - 100%) * 1000);
+  min-width: 50%;
+}
+
+.c-user-content [data-display-is~="width-two-thirds"],
+.c-user-content [data-width="two-thirds"] {
+  max-width: 100%;
+  width: calc((35em - 100%) * 1000);
+  min-width: 67%;
+}
+
+.c-user-content [data-display-is~="width-one-whole"],
+.c-user-content [data-width="one-whole"] {
+  width: 100%;
+}
+
+.c-user-content [data-contains~="image"] {
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+  /* [1] */
+}
+
+.c-user-content [data-contains~="image"] svg {
+  max-width: 100%;
+}
+
+.c-user-content [data-contains~="image"] img {
+  /*
+                    1. This is to provide positioning context for the ::after pseudo-element.
+                    2. This is so a broken image is still 100%.
+                    3. Center in container.
+                    4. This prevents long-thin images appearing huge an narrow (100% width) sizes.
+                       However, it's a bit of a magic number, so may not work in all cases.
+                */
+  position: relative;
+  /* [1] */
+  display: block;
+  /* [2] */
+  height: auto;
+  width: auto;
+  max-width: 100%;
+  max-height: 50vw;
+  /* [4] */
+  border-style: none;
+  margin: 0 auto;
+  /* [3] */
+}
+
+.c-user-content a[href][data-contains~="image"] {
+  border: 0;
+  padding: 0;
+}
+
+.c-user-content a[href][data-contains~="image"]:hover, .c-user-content a[href][data-contains~="image"]:active, .c-user-content a[href][data-contains~="image"]:focus {
+  border: 0;
+  box-shadow: 0 0 0 0.6rem #fff, 0 0 0 1.2rem rgba(0, 0, 0, 0.2);
+}
+
+.c-user-content a[href][rel=external][data-contains~="image"]::after {
+  position: absolute;
+  right: -1em;
+  top: -1em;
+  width: 1.25em;
+  height: 1.25em;
+  display: block;
+}
+
+.c-user-content [data-contains~="logo"] img {
+  max-height: 9rem;
+  background-color: transparent;
+}
+
+.c-user-content [data-contains~="logo-xsmall"] img {
+  max-height: 5.4rem;
+}
+
+.c-user-content [data-contains~="logo-small"] img {
+  max-height: 7.2rem;
+}
+
+.c-user-content [data-contains~="logo-medium"] img {
+  max-height: 9rem;
+}
+
+.c-user-content [data-contains~="logo-large"] img {
+  max-height: 10.8rem;
+}
+
+.c-user-content [data-contains~="logo-xlarge"] img {
+  max-height: 14.4rem;
+}
+
+.c-user-content [data-contains~="logo-xxlarge"] img {
+  max-height: 18rem;
+}
+
+.c-user-content [data-contains~="logo-xxxlarge"] img {
+  max-height: 21.6rem;
+}
+
+.c-user-content img {
+  background: #fff;
+}
+
+.c-user-content b > img,
+.c-user-content b > i > img {
+  border: 3px solid #a59c95 !important;
+}
+
+.c-user-content b > i > img {
+  padding: 1.2rem;
+}
+
+.c-user-content [data-contains~="portrait"] {
+  width: 100%;
+  max-width: 16em;
+}
+
+.c-user-content [data-contains~="portrait"]::before {
+  content: "";
+  width: 1px;
+  margin-left: -1px;
+  float: left;
+  height: 0;
+  padding-top: 100%;
+}
+
+.c-user-content [data-contains~="portrait"]::after {
+  /* to clear float */
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.c-user-content [data-contains~="portrait"] img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  max-height: none;
+  object-fit: cover;
+}
+
+.c-user-content img[src*="/assets/images/avatars/"],
+.c-user-content [data-contains~="portrait"] img {
+  display: block;
+  width: 100%;
+  max-width: 16em;
+  margin: 0 auto;
+  border-radius: 99999px;
+  overflow: hidden;
+}
+
+.c-user-content [data-display-as~="smallprint"] {
+  font-size: 0.875em;
+}
+
+.c-user-content [data-display-as~="strapline"] {
+  font-size: 1.125em;
+}
+
+.c-user-content figcaption {
+  text-align: center;
+  font-size: 0.875em;
+  margin-top: 1.2rem;
+}
+
+.c-user-content [data-contains~="download"] {
+  display: inline-block;
+}
+
+.c-user-content a[href$=".pdf"]:not([data-contains="thumbnail"])::before,
+.c-user-content a[href$=".pdf"] br + span::before,
+.c-user-content a[href$=".doc"]:not([data-contains="thumbnail"])::before,
+.c-user-content a[href$=".doc"] br + span::before,
+.c-user-content a[href$=".docx"]:not([data-contains="thumbnail"])::before,
+.c-user-content a[href$=".docx"] br + span::before,
+.c-user-content a[href$=".ppt"]:not([data-contains="thumbnail"])::before,
+.c-user-content a[href$=".ppt"] br + span::before,
+.c-user-content a[href$=".pptx"]:not([data-contains="thumbnail"])::before,
+.c-user-content a[href$=".pptx"] br + span::before,
+.c-user-content a[href$=".ppsx"]:not([data-contains="thumbnail"])::before,
+.c-user-content a[href$=".ppsx"] br + span::before,
+.c-user-content a[href$=".xls"]:not([data-contains="thumbnail"])::before,
+.c-user-content a[href$=".xls"] br + span::before,
+.c-user-content a[href$=".xlsx"]:not([data-contains="thumbnail"])::before,
+.c-user-content a[href$=".xlsx"] br + span::before,
+.c-user-content a[href$=".zip"]:not([data-contains="thumbnail"])::before,
+.c-user-content a[href$=".zip"] br + span::before {
+  content: "[FILE] ";
+  position: relative;
+  display: inline-block;
+  font-size: 0.75em;
+  vertical-align: middle;
+  line-height: 1;
+  opacity: .6;
+  margin-right: 0.5em;
+  margin-top: -0.3125em;
+}
+
+[data-contains="priority-content"] [data-display-as*="pale-box"],
+[data-contains="priority-content"] [data-display-as*="themed-box"] {
+  text-align: center;
+}
+
+[data-contains="priority-content"] [data-display-as*="pale-box"] h2,
+[data-contains="priority-content"] [data-display-as*="themed-box"] h2 {
+  font-size: 1.5em;
+  margin-bottom: 0;
+}
+
+[data-contains="priority-content"] [data-display-as*="pale-box"] h3,
+[data-contains="priority-content"] [data-display-as*="themed-box"] h3 {
+  font-size: 1.25em;
+  margin-bottom: 0;
+}
+
+[data-contains="priority-content"] [data-display-as*="pale-box"] p:only-child,
+[data-contains="priority-content"] [data-display-as*="themed-box"] p:only-child {
+  font-size: 1.25em;
+}
+
+a[href][rel="external"]::after {
+  opacity: 0.6;
+}
+
+blockquote {
+  border-top: 1px dotted #8e8279;
+  border-bottom: 1px dotted #8e8279;
+  background-color: rgba(0, 0, 0, 0.1);
+  padding: 2.4rem 4.8rem;
+  padding-bottom: 0 !important;
+}
+
+blockquote::after {
+  content: "";
+  display: block;
+  height: 1px;
+  margin-top: calc(2.4rem - 1px);
+  clear: both;
+}
+
+blockquote > p:first-child::before, blockquote > p:last-child::after {
+  display: block;
+  font-family: times,serif;
+  font-size: 60px;
+  font-size: 6rem;
+  line-height: 0;
+  opacity: 0.7;
+}
+
+blockquote > p:first-child::before {
+  content: "“";
+  content: open-quote;
+  float: left;
+  margin-left: -3.6rem;
+  margin-top: 2.5rem;
+}
+
+blockquote > p:last-child::after {
+  content: "”";
+  content: close-quote;
+  display: inline-block;
+  position: relative;
+  top: 2.5rem;
+}
+
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+  /*-------------------------------------------------------------------------------------------------|
+    Fall-Back Start-CSS Element: h
+|-------------------------------------------------------------------------------------------------*/
+  h1 {
+    margin-bottom: 2.4rem;
+    font-size: 3.25em;
+    line-height: 6rem;
+  }
+  h2 {
+    margin-bottom: 2.4rem;
+    font-size: 2.5em;
+    line-height: 4.8rem;
+  }
+  h3 {
+    margin-bottom: 2.4rem;
+    font-size: 1.875em;
+    line-height: 3.6rem;
+  }
+  h4 {
+    margin-bottom: 2.4rem;
+    font-size: 1.375em;
+    line-height: 3.6rem;
+  }
+  h5 {
+    margin-bottom: 2.4rem;
+    font-size: 1.125em;
+    line-height: 2.4rem;
+  }
+  h6 {
+    margin-bottom: 2.4rem;
+    font-size: 1em;
+    line-height: 2.4rem;
+  }
+}
+
+h1, h2, h3, h4 {
+  line-height: max(2.4rem, min(3.6rem, ((20px - 100%) * -999)), min(4.8rem, ((32px - 100%) * -999)), min(6rem, ((44px - 100%) * -999)), min(7.2rem, ((56px - 100%) * -999)));
+}
+
+h1 {
+  font-size: 26px;
+}
+
+@media screen and (min-width: 250px) {
+  h1 {
+    font-size: calc(26px + 26 * ((100vw - 250px) / 422));
+  }
+}
+
+@media screen and (min-width: 672px) {
+  h1 {
+    font-size: 52px;
+  }
+}
+
+h2 {
+  font-size: 24px;
+}
+
+@media screen and (min-width: 250px) {
+  h2 {
+    font-size: calc(24px + 16 * ((100vw - 250px) / 422));
+  }
+}
+
+@media screen and (min-width: 672px) {
+  h2 {
+    font-size: 40px;
+  }
+}
+
+h3 {
+  font-size: 22px;
+}
+
+@media screen and (min-width: 250px) {
+  h3 {
+    font-size: calc(22px + 8 * ((100vw - 250px) / 422));
+  }
+}
+
+@media screen and (min-width: 672px) {
+  h3 {
+    font-size: 30px;
+  }
+}
+
+h4 {
+  font-size: 20px;
+}
+
+@media screen and (min-width: 250px) {
+  h4 {
+    font-size: calc(20px + 2 * ((100vw - 250px) / 422));
+  }
+}
+
+@media screen and (min-width: 672px) {
+  h4 {
+    font-size: 22px;
+  }
+}
+
+/*
+@media screen and (max-width: 672px) {
+    h1 {
+        line-height: 1.15384615385;
+    }
+}
+*/
+table {
+  line-height: 1.4;
+}
+
+table {
+  font-size: 10px;
+}
+
+@media screen and (min-width: 250px) {
+  table {
+    font-size: calc(10px + 4 * ((100vw - 250px) / 422));
+  }
+}
+
+@media screen and (min-width: 672px) {
+  table {
+    font-size: 14px;
+  }
+}
+
+table a {
+  padding-bottom: 1px;
+}
+
+th:first-child {
+  text-align: left;
+}
+
+tfoot {
+  font-weight: bold;
+}
+
+td, th {
+  padding-top: 0.6rem;
+  padding-right: 0.6rem;
+  padding-bottom: calc(0.6rem - 1px);
+  padding-left: 0.6rem;
+}
+
+table[data-contains="numbers"] thead th:not(:first-child),
+table[data-contains="numbers"] td {
+  text-align: right;
+}
+
+summary + * {
+  margin-top: 2.4rem;
+}
+
+details:not([open]) > *:not(summary) {
+  display: none;
+}
+
+/*
+    Override contents.css body margin, because it messes with Magicline:
+*/
+body {
+  margin: 0;
+  padding: 10px 20px;
+  background-color: #fff;
+  min-width: auto;
+}
+
+/*
+    Make images more manageable inside the editor
+*/
+img {
+  max-width: 100%;
+  max-height: 50vw;
+  width: auto;
+}
+
+ul, ol, dl {
+  width: 100%;
+}
+
+.embed-container {
+  text-align: center;
+}
+
+.cke_widget_wrapper.cke_widget_block::before, .cke_widget_wrapper.cke_widget_block::after {
+  content: " ";
+  display: table;
+}
+
+.cke_widget_wrapper.cke_widget_block::after {
+  clear: both;
+}
+
+.cke_widget_drag_handler {
+  background: transparent !important;
+}
+
+.u-text-align--left {
+  text-align: left;
+}
+
+.u-text-align--center, .c-user-content [data-display-as~="blocks"] > * > * {
+  text-align: center;
+}
+
+.u-text-align--right {
+  text-align: right;
+}
+
+.u-text-align--left {
+  text-align: left;
+}
+
+/*
+    Unfortunately this stylesheet is loaded into toolbar dropdown selection frames, so we need
+    reset all these styles:
+*/
+.cke_panel_grouptitle {
+  line-height: 1 !important;
+  font-family: sans-serif, Arial, Verdana, "Trebuchet MS", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
+}
+
+.cke_panel_listItem a,
+.cke_panel_listItem a:hover,
+.cke_panel_listItem a:active,
+.cke_panel_listItem a:focus {
+  border: 0;
+  padding: 0 2px;
+  margin: 0;
+}
+
+.cke_panel_listItem * {
+  line-height: 1.7 !important;
+  font-size: 0.9em !important;
+}
+
+.cke_panel_listItem h2 {
+  font-size: 1.1em !important;
+}
+
+.cke_panel_listItem h3 {
+  font-size: 1.05em !important;
+}
+
+.cke_panel_listItem h4 {
+  font-size: 1em !important;
+}
+
+.cke_panel_listItem h5 {
+  font-size: 0.9em !important;
+}
+
+.cke_panel_listItem h6 {
+  font-size: 0.8em !important;
+}
