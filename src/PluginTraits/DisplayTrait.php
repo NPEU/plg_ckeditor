@@ -72,12 +72,11 @@ trait DisplayTrait
         $document = Factory::getDocument();
         $app      = Factory::getApplication();
 
+        $document->addScript(Uri::root() . '/media/vendor/jquery/js/jquery.min.js');
         if (!$app->isClient('administrator')) {
-            $document->addScript(Uri::root() . 'media/jui/js/jquery.min.js');
+            #$document->addScript(Uri::root() . '/media/vendor/jquery/js/jquery.min.js');
             HTMLHelper::_('script', 'media/mediafield.min.js', array('version' => 'auto', 'relative' => true));
         }
-        #echo 'here'; exit;
-
         //$document->addStyleSheet(Uri::root() . $this->_basePath . '/ckeditor.css');
         $script = array();
         if (strpos(JPATH_BASE, 'administrator') === false) {
