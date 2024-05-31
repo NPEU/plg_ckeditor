@@ -22,7 +22,7 @@ CKEDITOR.dialog.add('jimageDialog', function(editor) {
         class="field-media-wrapper"
         type="image"
         base-path="${window.location.origin}/"
-        root-folder="assets/images"
+        root-folder="/assets/images"
         url="/administrator/index.php?option=com_media&amp;view=media&amp;tmpl=component&amp;mediatypes=0&amp;asset=com_content&amp;author=&amp;fieldid={field-media-id}&amp;path="
         modal-container=".modal"
         modal-width="100%"

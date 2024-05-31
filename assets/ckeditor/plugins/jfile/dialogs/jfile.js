@@ -21,7 +21,7 @@ CKEDITOR.dialog.add('jfileDialog', function(editor) {
         class="field-media-wrapper"
         type="image"
         base-path="${window.location.origin}/"
-        root-folder="assets/downloads"
+        root-folder="/assets/downloads"
         url="/administrator/index.php?option=com_media&amp;view=media&amp;tmpl=component&amp;mediatypes=0,1,2,3&amp;asset=com_content&amp;author=&amp;fieldid={field-media-id}&amp;path="
         modal-container=".modal"
         modal-width="100%"
@@ -101,8 +101,18 @@ CKEDITOR.dialog.add('jfileDialog', function(editor) {
                             jQuery('#jfile_href').change(function () {
                                 var href = this.value;
                                 if (href != '') {
-                                    let img_src = window.location.origin + '/' + href + '.png';
-                                    el.setValue('/' + href);
+                                    // Strip stringe Joomla stuff:
+                                    //href = '/' + href.replace(/#.*$/, '');
+                                    href = '/' + href.replace(/#.*$/, '').replace(/^\/*/, '');
+                                    console.log(href);
+
+                                    el.setValue(href);
+                                    //document.getElementById('jfile_href').value = href;
+                                    this.value = href;
+                                    //var $el = el.getElement();
+                                    //console.log($el);
+                                    let img_src = window.location.origin + href + '.png';
+                                    //
                                     //console.log(el, href);
 
                                     var JoomlaFieldMedia = jQuery('#jfile_href').parents('joomla-field-media')[0];
