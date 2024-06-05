@@ -104,7 +104,7 @@ CKEDITOR.dialog.add('jfileDialog', function(editor) {
                                     // Strip stringe Joomla stuff:
                                     //href = '/' + href.replace(/#.*$/, '');
                                     href = '/' + href.replace(/#.*$/, '').replace(/^\/*/, '');
-                                    console.log(href);
+                                    //console.log(href);
 
                                     el.setValue(href);
                                     //document.getElementById('jfile_href').value = href;
@@ -235,7 +235,7 @@ CKEDITOR.dialog.add('jfileDialog', function(editor) {
                 var jfile_thumb_only = element.getText() == '';
                 //var jfile_thumb_only = (links.count() == 1 && jfile_thumb);
 
-                //console.log('Onshow jfile_thumb', jfile);
+                console.log('Onshow jfile_thumb', jfile_thumb);
 
                 if (jfile) {
                     // We're in Edit mode:
@@ -303,7 +303,8 @@ CKEDITOR.dialog.add('jfileDialog', function(editor) {
             if (jfile_href != '') {
                 var data_modified_time = '';
 
-                var file_path = window.location.origin + '/' + jfile_href.replace(window.location.origin, '').replace(/^\/|\/$/g, '');
+                var img_path = '/' + jfile_href.replace(window.location.origin, '').replace(/^\/|\/$/g, '');
+                var file_path = window.location.origin + img_path;
                 //console.log('file_path', file_path);
                 var file_info = JSON.parse(CKEDITOR.ajax.load(file_path + '.json'));
                 //console.log('INFO', file_info);
@@ -344,7 +345,7 @@ CKEDITOR.dialog.add('jfileDialog', function(editor) {
                         minmax = '&m=1';
                     }
 
-                    jfile_html.push('<img alt="' + alt + thumb_alt + '" src="' + file_path + '.png?s=' + jfile_thumbsize + minmax + '" width="' + img_info.adj_width + '" height="' + img_info.adj_height + '">');
+                    jfile_html.push('<img alt="' + alt + thumb_alt + '" src="' + img_path + '.png?s=' + jfile_thumbsize + minmax + '" width="' + img_info.adj_width + '" height="' + img_info.adj_height + '">');
 
                     if (!jfile_thumbonly) {
                         jfile_html.push('<br>');
