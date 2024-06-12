@@ -118,13 +118,12 @@ trait DisplayTrait
 
         //__DIR__/ck_wym/ck_wym.js __DIR__/ck_extras/ck_extras.js
         //echo '<pre>'; var_dump($js_files); echo '</pre>';exit;
-        //echo '<pre>'; var_dump(JPATH_BASE); echo '</pre>';exit;
         //return '';
         if (!empty($js_files)) {
             $js_files = explode("\n", str_replace("\r", '', $js_files));
             foreach ($js_files as $file) {
                 if ($file = realpath(str_replace('__DIR__', dirname(dirname(__DIR__)), $file))) {
-                    $file = str_replace(array(JPATH_ROOT, '//', ':/'), array(Uri::root(), '/', '://'), $file);
+                    $file = str_replace([JPATH_ROOT, '//', ':/'], [Uri::root(), '/', '://'], $file);
                     $document->addScript($file);
                 }
             }
@@ -178,7 +177,6 @@ trait DisplayTrait
         #echo '<pre>'; var_dump(func_get_args()); echo '</pre>';exit;
         $return = '';
         require(dirname(dirname(__DIR__)) . '/assets/js-vars.php');
-
         //$jplugins_path = JUri::root() . $this->_basePath . '/plugins';
 
         if ((int) $width) {
@@ -198,7 +196,7 @@ trait DisplayTrait
             /*foreach ($vars as $name => $value) {
                 $script .= "var $name = $value;\n";
             }*/
-            $script .= "    CKEDITOR.timestamp='202312051032';
+            $script .= "    CKEDITOR.timestamp='202406121106';
         jQuery(function() {
         var editor = CKEDITOR.replace('" . $name . "', {
             customConfig: 'customConfig.js',

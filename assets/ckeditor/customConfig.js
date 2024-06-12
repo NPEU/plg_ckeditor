@@ -138,8 +138,8 @@ CKEDITOR.editorConfig = function( config ) {
     ];
 
     //config.autoGrow_maxHeight = 400;
-    //config.filebrowserBrowseUrl = '/plugins/editors/ckeditorbasic/ckfinder/ckfinder.html';
-    //config.filebrowserUploadUrl = '/plugins/editors/ckeditorbasic/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files';
+    //config.filebrowserBrowseUrl = '/plugins/editors/ckeditor/ckfinder/ckfinder.html';
+    //config.filebrowserUploadUrl = '/plugins/editors/ckeditor/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files';
 
     // Note some of these can be deleted once development is complete and the build up to date:
     // Plugins that aren't released on the CKEditor site still need to be here as they can't be
@@ -241,13 +241,13 @@ CKEDITOR.editorConfig = function( config ) {
     config.ignoreEmptyParagraph = false;
     config.fillEmptyBlocks = true;
 
-    //jQuery('head').append('<link rel="stylesheet" type="text/css" href="/plugins/editors/ckeditorbasic/editor.css' + '">');
+    //jQuery('head').append('<link rel="stylesheet" type="text/css" href="/plugins/editors/ckeditor/editor.css' + '">');
     var head = document.head;
     var link = document.createElement("link");
 
     link.type = "text/css";
     link.rel = "stylesheet";
-    link.href = "/plugins/editors/ckeditorbasic/editor.css";
+    link.href = "/plugins/editors/ckeditor/assets/editor.css";
 
     head.appendChild(link);
     console.log(head);
