@@ -16,8 +16,8 @@ use Joomla\CMS\Editor\AbstractEditorProvider;
 use Joomla\Event\DispatcherInterface;
 use Joomla\Registry\Registry;
 
-use NPEU\Plugin\Editors\Jce\PluginTraits\DisplayTrait;
-use NPEU\Plugin\Editors\Jce\PluginTraits\XTDButtonsTrait;
+use NPEU\Plugin\Editors\CKEditor\PluginTraits\DisplayTrait;
+use NPEU\Plugin\Editors\CKEditor\PluginTraits\XTDButtonsTrait;
 
 /**
  * Editor provider class

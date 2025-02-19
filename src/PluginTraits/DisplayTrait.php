@@ -186,8 +186,14 @@ trait DisplayTrait
             $height .= 'px';
         }
         $return .= '<textarea name="'.$name.'" id="'.$id.'" cols="'.$col.'" rows="'.$row.'" style="width:'.$width.'; height:'.$height.'">' . $content . '</textarea>' . "\n";
-        //$return .= $this->_displayButtons($id, $buttons, $asset, $author);
-        $return .= $this->displayButtons($id, $buttons, $asset, $author);
+
+        $options = [
+            'editorId' => $id,
+            'asset' => $asset,
+            'author' => $author
+        ];
+        $return .= $this->displayButtons($buttons, $options);
+        #$return .= $this->displayButtons($id, $buttons, $asset, $author);
 
         $return .= "<script type=\"text/javascript\">\n";
         #echo '<pre>'; var_dump(get_defined_constants(true)); echo '</pre>';exit;
@@ -353,20 +359,22 @@ editors.push(" . $value . ");\n";
     /**
      * Displays the editor buttons.
      *
-     * @param   string  $name     Button name.
-     * @param   mixed   $buttons  [array with button objects | boolean true to display buttons]
-     * @param   mixed   $asset    Unused.
-     * @param   mixed   $author   Unused.
+     * Helper method for rendering the editor buttons.
+     *
+     * @param   mixed   $buttons  Array with button names to be excluded. Empty array or boolean true to display all buttons.
+     * @param   array   $options  Associative array with additional parameters
+     *
+     * @return  string
      *
      * @return  string|void
      */
-    protected function displayButtons($name, $buttons, $asset, $author)
+    protected function displayButtons($buttons, array $options = [])
     {
         if (is_array($buttons) || (is_bool($buttons) && $buttons)) {
             $buttonsEvent = new Event(
                 'getButtons',
                 [
-                    'editor'  => $name,
+                    'editor'  => $options['editorId'],
                     'buttons' => $buttons,
                 ]
             );

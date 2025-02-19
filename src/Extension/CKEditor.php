@@ -80,7 +80,7 @@ class CKEditor extends CMSPlugin implements SubscriberInterface
      *
      * @since   5.0.0
      */
-    public function onEditorSetup(EditorSetupEvent $event)
+    public function onEditorSetup(\Joomla\CMS\Event\Editor\EditorSetupEvent $event)
     {
         $this->loadLanguage();
 
