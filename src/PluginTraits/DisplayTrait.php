@@ -72,13 +72,85 @@ trait DisplayTrait
         $document = Factory::getDocument();
         $app      = Factory::getApplication();
 
-        $document->addScript(Uri::root() . '/media/vendor/jquery/js/jquery.min.js');
-        if (!$app->isClient('administrator')) {
+        $doc = Factory::getDocument();
+        $wam = $doc->getWebAssetManager();
+
+
+
+        $wam->useStyle('webcomponent.field-media')
+            ->useScript('webcomponent.field-media');
+
+        $wam->useScript('webcomponent.media-select');
+        $doc->addScriptOptions('media-picker-api', ['apiBaseUrl' => Uri::base() . 'index.php?option=com_media&format=json']);
+
+
+        $imagesExt    = array_map(
+            'trim',
+            explode(
+                ',',
+                ComponentHelper::getParams('com_media')->get(
+                    'image_extensions',
+                    'bmp,gif,jpg,jpeg,png,webp'
+                )
+            )
+        );
+        $audiosExt = array_map(
+            'trim',
+            explode(
+                ',',
+                ComponentHelper::getParams('com_media')->get(
+                    'audio_extensions',
+                    'mp3,m4a,mp4a,ogg'
+                )
+            )
+        );
+        $videosExt = array_map(
+            'trim',
+            explode(
+                ',',
+                ComponentHelper::getParams('com_media')->get(
+                    'video_extensions',
+                    'mp4,mp4v,mpeg,mov,webm'
+                )
+            )
+        );
+        $documentsExt = array_map(
+            'trim',
+            explode(
+                ',',
+                ComponentHelper::getParams('com_media')->get(
+                    'doc_extensions',
+                    'doc,odg,odp,ods,odt,pdf,ppt,txt,xcf,xls,csv'
+                )
+            )
+        );
+
+        #echo '<pre>'; var_dump($doc->getScriptOptions('media-picker')); echo '</pre>'; exit;
+        if (count($doc->getScriptOptions('media-picker')) === 0) {
+            $doc->addScriptOptions('media-picker', [
+                'images'    => $imagesExt,
+                'audios'    => $audiosExt,
+                'videos'    => $videosExt,
+                'documents' => $documentsExt
+            ]);
+        }
+
+        #$document->addScript(Uri::root() . '/media/vendor/jquery/js/jquery.min.js');
+        /*if (!$app->isClient('administrator')) {
             #$document->addScript(Uri::root() . '/media/vendor/jquery/js/jquery.min.js');
             HTMLHelper::_('script', 'media/mediafield.min.js', array('version' => 'auto', 'relative' => true));
-        }
+        }*/
+
+
+        #$document->addScript(Uri::root() . '/media/system/js/joomla-core-loader.js');
+        #$document->addScript(Uri::root() . '/media/system/js/fields/joomla-field-media.js');
+        #$document->addScript(Uri::root() . '/media/system/js/fields/joomla-media-select.js');
+
+
+        #$document->addStylesheet(Uri::root() . '/media/system/css/fields/joomla-field-media.css');
+
         //$document->addStyleSheet(Uri::root() . $this->_basePath . '/ckeditor.css');
-        $script = array();
+        $script = [];
         if (strpos(JPATH_BASE, 'administrator') === false) {
             $script[] =  "\n\n";
             $script[] = '    var ready = function(fn) {';
