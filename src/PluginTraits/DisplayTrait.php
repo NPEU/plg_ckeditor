@@ -72,16 +72,15 @@ trait DisplayTrait
         $document = Factory::getDocument();
         $app      = Factory::getApplication();
 
-        $doc = Factory::getDocument();
-        $wam = $doc->getWebAssetManager();
+        $wam = $document->getWebAssetManager();
 
-
+        $document->addScript(Uri::root() . '/media/vendor/jquery/js/jquery.min.js');
 
         $wam->useStyle('webcomponent.field-media')
             ->useScript('webcomponent.field-media');
 
         $wam->useScript('webcomponent.media-select');
-        $doc->addScriptOptions('media-picker-api', ['apiBaseUrl' => Uri::base() . 'index.php?option=com_media&format=json']);
+        $document->addScriptOptions('media-picker-api', ['apiBaseUrl' => Uri::base() . 'index.php?option=com_media&format=json']);
 
 
         $imagesExt    = array_map(
@@ -125,8 +124,8 @@ trait DisplayTrait
             )
         );
 
-        if (count($doc->getScriptOptions('media-picker')) === 0) {
-            $doc->addScriptOptions('media-picker', [
+        if (count($document->getScriptOptions('media-picker')) === 0) {
+            $document->addScriptOptions('media-picker', [
                 'images'    => $imagesExt,
                 'audios'    => $audiosExt,
                 'videos'    => $videosExt,
