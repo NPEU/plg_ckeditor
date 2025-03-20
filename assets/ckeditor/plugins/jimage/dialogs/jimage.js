@@ -9,13 +9,14 @@
 
 CKEDITOR.dialog.add('jimageDialog', function(editor) {
 
+    var scope = editor.id;
     var placeholder = "https://via.placeholder.com/150?text=No+image+selected";
     var caption_html = '';
 
         //var file_input = '<div style="width: 150px; height: 150px;"><img id="jimage_thumb" src="' + placeholder + '" style="max-width: 100%; max-height: 100%;"></div><div class="controls"><div class="field-media-wrapper" data-basepath="' + window.location.origin + '/" data-url="index.php?option=com_media&amp;view=images&amp;tmpl=component&amp;asset=com_menus&amp;author=&amp;fieldid={field-media-id}&amp;ismoo=0&amp;folder=images" data-modal=".modal" data-modal-width="100%" data-modal-height="645px" data-input=".field-media-input" data-button-select=".button-select" data-button-clear=".button-clear" data-button-save-selected=".button-save-selected" data-preview="false" data-preview-as-tooltip="false" data-preview-container=".field-media-preview" data-preview-width="200" data-preview-height="200"><div id="imageModal_jimage_src" tabindex="-1" class="modal hide fade"><div class="modal-header"><button type="button" class="close novalidate" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button><h3>Change Image</h3></div><div class="modal-body"></div></div><div class="input-prepend input-append"><span rel="popover" class="add-on pop-helper field-media-preview" title="" data-content="No image selected." data-original-title="Selected image." data-trigger="hover"><span class="icon-eye" aria-hidden="true"></span></span><input type="text" name="jimage_src" id="jimage_src" value="" readonly="readonly" class="input-small hasTooltip field-media-input" data-original-title="" title=""><button type="button" class="btn button-select">Select</button><button type="button" class="btn hasTooltip button-clear" title="" aria-label="Clear" data-original-title="Clear"><span class="icon-remove" aria-hidden="true"></span></button></div></div></div>';
         var image_input = `
-<form id="image_input_form">
-<label class="cke_dialog_ui_labeled_label" for="jimage_src">Image</label>
+<form id="${scope}_image_input_form">
+<label class="cke_dialog_ui_labeled_label" for="${scope}_jimage_src">Image</label>
 </form>
 <div class="controls">
     <joomla-field-media
@@ -38,7 +39,7 @@ CKEDITOR.dialog.add('jimageDialog', function(editor) {
         supported-extensions="{&quot;images&quot;:[&quot;bmp&quot;,&quot;gif&quot;,&quot;jpg&quot;,&quot;png&quot;,&quot;doc&quot;,&quot;docx&quot;,&quot;xls&quot;,&quot;xlsx&quot;,&quot;pdf&quot;,&quot;ppt&quot;,&quot;pptx&quot;,&quot;.mp3&quot;],&quot;audios&quot;:[],&quot;videos&quot;:[],&quot;documents&quot;:[]}"
     >
         <div
-            id="imageModal_jimage_src"
+            id="${scope}_imageModal_jimage_src"
             data-test="test"
             role="dialog"
             tabindex="-1"
@@ -63,7 +64,7 @@ CKEDITOR.dialog.add('jimageDialog', function(editor) {
         </div>
         <div class="field-media-preview"><span class="field-media-preview-icon"></span></div>
         <div class="input-group">
-            <input type="text" name="jimage_src" id="jimage_src" value="" class="form-control field-media-input" form="image_input_form">
+            <input type="text" name="jimage_src" id="${scope}_jimage_src" value="" class="form-control field-media-input" form="${scope}_image_input_form">
             <button type="button" class="btn btn-success button-select">Select</button>
             <button type="button" class="btn btn-danger button-clear" style="display: none;"><span class="icon-times" aria-hidden="true"></span><span class="visually-hidden">Clear</span></button>
         </div>
@@ -89,25 +90,25 @@ CKEDITOR.dialog.add('jimageDialog', function(editor) {
                         onLoad: function() {
                             var el = this;
 
-                            jQuery('#jimage_src').change(function () {
+                            jQuery('#' + scope + '_jimage_src').change(function () {
                                 //var src = this.value;
                                 // Remove png suffix and other J4 stuff:
                                 var src = this.value.replace(/#.*$/, '');
 
                                 if (src == '') {
                                     el.setValue(src);
-                                    jQuery('#jimage_thumb').attr('src', placeholder);
+                                    //jQuery('#jimage_thumb').attr('src', placeholder);
                                 } else {
                                     el.setValue('/' + src);
-                                    jQuery('#jimage_thumb').attr('src', '/' + src);
+                                    //jQuery('#jimage_thumb').attr('src', '/' + src);
                                 }
                             });
                         },
                         onShow: function() {
                             // Update the url so that the correct folder is loaded into the
                             // modal for better UX for existing files:
-                            var modal_el = jQuery('#imageModal_jimage_src')[0];
-                            var input_el = jQuery('#jimage_src')[0];
+                            var modal_el = jQuery('#' + scope + '_imageModal_jimage_src')[0];
+                            var input_el = jQuery('#' + scope + '_jimage_src')[0];
 
                             //console.log('input_el.value', input_el.value);
 
@@ -243,13 +244,15 @@ CKEDITOR.dialog.add('jimageDialog', function(editor) {
             }
         ],
 
-        onShow: function() {
+        onShow: function () {
+
             // Reset the jimage data:
             this.definition.jimage = {};
 
             this.insertMode = true;
 
-            var dialog      = this;
+            var dialog = this;
+            //dialog.reset();
             var definition  = dialog.definition;
             var jimage_data = definition.jimage;
 
@@ -281,9 +284,9 @@ CKEDITOR.dialog.add('jimageDialog', function(editor) {
                     if (src == '') {
                         src = placeholder;
                     }
-                    jQuery('#jimage_thumb').attr('src', src);
-                    //jQuery('#jimage_src').attr('value', src);
-                    var JoomlaFieldMedia = jQuery('#jimage_src').parents('joomla-field-media')[0];
+                    //jQuery('#jimage_thumb').attr('src', src);
+                    //jQuery('#' + scope + '_jimage_src').attr('value', src);
+                    var JoomlaFieldMedia = jQuery('#' + scope + '_jimage_src').parents('joomla-field-media')[0];
                     JoomlaFieldMedia.setValue(src);
 
 
@@ -337,12 +340,12 @@ CKEDITOR.dialog.add('jimageDialog', function(editor) {
             // Clean up:
             this.definition.jimage = {};
             // Make sure the joomla image src is cleared:
-            jQuery('#jimage_thumb').attr('src', placeholder);
-            jQuery('#jimage_src').val('');
+            //jQuery('#jimage_thumb').attr('src', placeholder);
+            jQuery('#' + scope + '_jimage_src').val('');
             this.setValueOf('tab--settings', 'src', '');
 
             // Clear the preview:
-            var JoomlaFieldMedia = jQuery('#jimage_src').parents('joomla-field-media')[0];
+            var JoomlaFieldMedia = jQuery('#' + scope + '_jimage_src').parents('joomla-field-media')[0];
             JoomlaFieldMedia.clearValue();
             JoomlaFieldMedia.updatePreview();
         },

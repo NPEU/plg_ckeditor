@@ -9,12 +9,13 @@
 
 CKEDITOR.dialog.add('jfileDialog', function(editor) {
 
+    var scope = editor.id;
     var thumb_alt = 'Thumbnail preview of the file.';
 
     //var file_input = '<div class="controls"><div id="field-media-wrapper" class="field-media-wrapper" data-basepath="' + window.location.origin + '/" data-url="index.php?option=com_media&amp;view=images&amp;tmpl=component&amp;asset=com_menus&amp;author=&amp;fieldid={field-media-id}&amp;ismoo=0&amp;folder=downloads/" data-modal=".modal" data-modal-width="100%" data-modal-height="645px" data-input=".field-media-input" data-button-select=".button-select" data-button-clear=".button-clear" data-button-save-selected=".button-save-selected" data-preview="false" data-preview-as-tooltip="false" data-preview-container=".field-media-preview" data-preview-width="200" data-preview-height="200"><div id="fileModal_jfile_href" tabindex="-1" class="modal hide fade"><div class="modal-header"><button type="button" class="close novalidate" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button><h3>Change File</h3></div><div class="modal-body"></div></div><div class="input-append"><input type="text" name="jfile_href" id="jfile_href" value="" readonly="readonly" class="input-small hasTooltip field-media-input" data-original-title="" title=""><button type="button" class="btn button-select">Select</button><button type="button" class="btn hasTooltip button-clear" title="" aria-label="Clear" data-original-title="Clear"><span class="icon-remove" aria-hidden="true"></span></button></div></div></div>';
     var file_input = `
-<form id="file_input_form">
-<label class="cke_dialog_ui_labeled_label" for="jfile_href">File</label>
+<form id="${scope}_file_input_form">
+<label class="cke_dialog_ui_labeled_label" for="${scope}_jfile_href">File</label>
 </form>
 <div class="controls">
     <joomla-field-media
@@ -37,7 +38,7 @@ CKEDITOR.dialog.add('jfileDialog', function(editor) {
         supported-extensions="{&quot;images&quot;:[&quot;bmp&quot;,&quot;gif&quot;,&quot;jpg&quot;,&quot;png&quot;],&quot;audios&quot;:[&quot;mp3&quot;],&quot;videos&quot;:[],&quot;documents&quot;:[&quot;doc&quot;,&quot;docx&quot;,&quot;xls&quot;,&quot;xlsx&quot;,&quot;pdf&quot;,&quot;ppt&quot;,&quot;pptx&quot;]}"
     >
         <div
-            id="fileModal_jfile_href"
+            id="${scope}_fileModal_jfile_href"
             data-test="test"
             role="dialog"
             tabindex="-1"
@@ -62,7 +63,7 @@ CKEDITOR.dialog.add('jfileDialog', function(editor) {
         </div>
         <div class="field-media-preview"><span class="field-media-preview-icon"></span></div>
         <div class="input-group">
-            <input type="text" name="jfile_href" id="jfile_href" value="" class="form-control field-media-input" form="file_input_form">
+            <input type="text" name="jfile_href" id="${scope}_jfile_href" value="" class="form-control field-media-input" form="${scope}_file_input_form">
             <button type="button" class="btn btn-success button-select">Select</button>
             <button type="button" class="btn btn-danger button-clear" style="display: none;"><span class="icon-times" aria-hidden="true"></span><span class="visually-hidden">Clear</span></button>
         </div>
@@ -98,7 +99,7 @@ CKEDITOR.dialog.add('jfileDialog', function(editor) {
                         onLoad: function() {
                             var el = this;
 
-                            jQuery('#jfile_href').change(function () {
+                            jQuery('#' + scope + '_jfile_href').change(function () {
                                 var href = this.value;
                                 if (href != '') {
                                     // Strip stringe Joomla stuff:
@@ -115,7 +116,7 @@ CKEDITOR.dialog.add('jfileDialog', function(editor) {
                                     //
                                     //console.log(el, href);
 
-                                    var JoomlaFieldMedia = jQuery('#jfile_href').parents('joomla-field-media')[0];
+                                    var JoomlaFieldMedia = jQuery('#' + scope + '_jfile_href').parents('joomla-field-media')[0];
 
                                     // Can't update the preview separate to the value, so fudging it:
                                     JoomlaFieldMedia.previewElement.innerHTML = '';
@@ -131,8 +132,8 @@ CKEDITOR.dialog.add('jfileDialog', function(editor) {
                         onShow: function() {
                             // Update the url so that the correct folder is loaded into the
                             // modal for better UX for existing files:
-                            var modal_el = jQuery('#fileModal_jfile_href')[0];
-                            var input_el = jQuery('#jfile_href')[0];
+                            var modal_el = jQuery('#' + scope + '_fileModal_jfile_href')[0];
+                            var input_el = jQuery('#' + scope + '_jfile_href')[0];
 
                             //console.log('input_el.value', input_el.value);
 
@@ -154,7 +155,7 @@ CKEDITOR.dialog.add('jfileDialog', function(editor) {
                         setup: function (jfile_data) {
                             //console.log('jfile_data', jfile_data);
                             this.setValue(jfile_data.href);
-                            let JoomlaFieldMedia = jQuery('#jfile_href').parents('joomla-field-media')[0];
+                            let JoomlaFieldMedia = jQuery('#' + scope + '_jfile_href').parents('joomla-field-media')[0];
                             JoomlaFieldMedia.setValue(jfile_data.href);
 
                             //console.log('jfile_data.href', jfile_data.href);
@@ -235,7 +236,7 @@ CKEDITOR.dialog.add('jfileDialog', function(editor) {
                 var jfile_thumb_only = element.getText() == '';
                 //var jfile_thumb_only = (links.count() == 1 && jfile_thumb);
 
-                console.log('Onshow jfile_thumb', jfile_thumb);
+                //console.log('Onshow jfile_thumb', jfile_thumb);
 
                 if (jfile) {
                     // We're in Edit mode:
@@ -253,7 +254,7 @@ CKEDITOR.dialog.add('jfileDialog', function(editor) {
 
                     jfile_data.thumbOnly = jfile_thumb_only;
 
-                    var JoomlaFieldMedia = jQuery('#jfile_href').parents('joomla-field-media')[0];
+                    var JoomlaFieldMedia = jQuery('#' + scope + '_jfile_href').parents('joomla-field-media')[0];
 
                     // Use the correct method to set the value (and thus preview) by appending the
                     // png suffix:
@@ -277,10 +278,10 @@ CKEDITOR.dialog.add('jfileDialog', function(editor) {
             // Clean up:
             this.definition.jfile = {};
             // Make sure the joomla href is cleared:
-            jQuery('#jfile_href').val('');
+            jQuery('#' + scope + '_jfile_href').val('');
             this.setValueOf('tab--settings', 'href', '');
             // Clear the preview:
-            var JoomlaFieldMedia = jQuery('#jfile_href').parents('joomla-field-media')[0];
+            var JoomlaFieldMedia = jQuery('#' + scope + '_jfile_href').parents('joomla-field-media')[0];
             JoomlaFieldMedia.clearValue();
             JoomlaFieldMedia.updatePreview();
         },
