@@ -10,7 +10,7 @@
     <license>MIT License; see LICENSE.md</license>
 
     <!--  The version string is recorded in the components table -->
-    <version>4.2.1</version>
+    <version>4.2.2</version>
     <!-- The description is optional and defaults to the name -->
     <description>PLG_EDITORS_CKEDITOR_XML_DESCRIPTION</description>
 
