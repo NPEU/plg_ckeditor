@@ -19,11 +19,11 @@ trait XTDButtonsTrait
 {
     private function getXtdButtonsList($name, $buttons, $asset, $author)
     {
-        $list = array(
-            $name => array(),
-        );
+        $list = [
+            $name => [],
+        ];
 
-        $excluded = array('readmore', 'pagebreak');
+        $excluded = ['readmore', 'pagebreak'];
 
         if (!is_array($buttons)) {
             $buttons = !$buttons ? false : $excluded;
@@ -54,7 +54,7 @@ trait XTDButtonsTrait
                         $href = '';
                     }
 
-                    $options = array(
+                    $options = [
                         'name' => $button->get('text'),
                         'id' => $id,
                         'title' => $button->get('text'),
@@ -62,8 +62,8 @@ trait XTDButtonsTrait
                         'href' => $href,
                         'onclick' => $button->get('onclick', ''),
                         'svg' => $button->get('iconSVG'),
-                        'options' => $button->get('options', array()),
-                    );
+                        'options' => $button->get('options', []),
+                    ];
 
                     $list[$name][] = $options;
                 }

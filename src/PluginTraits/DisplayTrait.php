@@ -247,8 +247,9 @@ trait DisplayTrait
             'asset' => $asset,
             'author' => $author
         ];
-        $return .= $this->displayButtons($buttons, $options);
-        #$return .= $this->displayButtons($id, $buttons, $asset, $author);
+
+        #$return .= $this->displayButtons($buttons, $options);
+        $return .= $this->displayXtdButtons($id, $buttons, $asset, $author);
 
         $return .= "<script type=\"text/javascript\">\n";
         #echo '<pre>'; var_dump(get_defined_constants(true)); echo '</pre>';exit;
@@ -280,6 +281,7 @@ editors.push(" . $value . ");\n";
         }
         $return .= $script;
         $return .= "</script>\n";
+
         return $return;
 
         /*if (empty($id)) {
@@ -423,7 +425,7 @@ editors.push(" . $value . ");\n";
      *
      * @return  string|void
      */
-    protected function displayButtons($buttons, array $options = [])
+    /*protected function displayButtons($buttons, array $options = [])
     {
         if (is_array($buttons) || (is_bool($buttons) && $buttons)) {
             $buttonsEvent = new Event(
@@ -433,11 +435,12 @@ editors.push(" . $value . ");\n";
                     'buttons' => $buttons,
                 ]
             );
-
+            echo 'buttonsEvent<pre>'; var_dump($buttonsEvent); echo '</pre>'; #exit;
             $buttonsResult = $this->getDispatcher()->dispatch('getButtons', $buttonsEvent);
+            echo '<pre>'; var_dump($buttonsResult); echo '</pre>'; exit;
             $buttons       = $buttonsResult['result'];
 
             return LayoutHelper::render('joomla.editors.buttons', $buttons);
         }
-    }
+    }*/
 }
